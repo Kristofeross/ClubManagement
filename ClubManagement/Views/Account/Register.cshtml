@@ -1,0 +1,29 @@
+﻿@model ClubManagement.Models.Account;
+@if(TempData["Alert"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Alert"]
+    </div>
+}
+<p>Register</p>
+<form method="post" asp-action="AddAccount">
+    <div>
+        <label>Mail:</label>
+        <input type="email" name="Email" required />
+    </div>
+    <div>
+        <label>Hasło:</label>
+        <input type="password" name="PasswordHash" @* pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!\u0040#$%^&*_=+-.,]).{8,}$" *@ required />
+    </div>
+    <div>
+        <label>Rola:</label>
+        <select name="Role">
+            <option value="Player">Player</option>
+            <option value="Coach">Coach</option>
+            <option value="Admin">Admin</option>
+        </select>
+    </div>
+    <div>
+        <button type="submit">Register</button>
+    </div>
+</form>

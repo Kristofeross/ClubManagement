@@ -1,0 +1,11 @@
+InFootballers
+// Footballer *-* GroupTraining
+public ICollection<FootballerGroup> FootballerGroups { get; set; } = new List<FootballerGroup>();
+// Footballer *-* Match
+public ICollection<MatchFootballer> MatchFootballers { get; set; }
+InGroupTrainings
+// Footballer *-* GroupTraining
+public ICollection<FootballerGroup> FootballerGroups { get; set; } = new List<FootballerGroup>();
+InMatch
+// Footballer - Match | Many to many
+public ICollection<MatchFootballer> MatchFootballers { get; set; }
