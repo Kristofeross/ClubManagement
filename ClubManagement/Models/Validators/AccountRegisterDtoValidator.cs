@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿/*using FluentValidation;
 using ClubManagement.ApplicationDbContext;
 
 namespace ClubManagement.Models.Validators
@@ -10,8 +10,8 @@ namespace ClubManagement.Models.Validators
         public AccountRegisterDtoValidator(ClubDbContext dbContext) 
         {
             // walidacja do AcountName
-            /*RuleFor(x => x.AccountName)
-                .NotEmpty();*/
+            *//*RuleFor(x => x.AccountName)
+                .NotEmpty();*//*
 
             // Walidacja do Password
             RuleFor(x => x.PasswordHash)
@@ -38,3 +38,4 @@ namespace ClubManagement.Models.Validators
         }
     }
 }
+*/

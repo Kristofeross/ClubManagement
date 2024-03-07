@@ -13,6 +13,9 @@ namespace ClubManagement.Models
         public string Country { get; set; } = string.Empty;
         public int Age { get; set; }
         public DateTime DateOfBirth { get; set; }
+        // Coach 1-1 Account
+        public int AccountId { get; set; }
+        public Account Account { get; set; }
 
     }
 }

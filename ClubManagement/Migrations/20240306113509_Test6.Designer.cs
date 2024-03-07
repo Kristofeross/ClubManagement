@@ -4,6 +4,7 @@ using ClubManagement.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    partial class ClubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240306113509_Test6")]
+    partial class Test6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,10 +150,6 @@ namespace ClubManagement.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique()
                         .HasFilter("[AccountId] IS NOT NULL");
-
-                    b.HasIndex("StatisticsId")
-                        .IsUnique()
-                        .HasFilter("[StatisticsId] IS NOT NULL");
 
                     b.ToTable("Footballers");
                 });
@@ -289,6 +287,10 @@ namespace ClubManagement.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FootballerId")
+                        .IsUnique()
+                        .HasFilter("[FootballerId] IS NOT NULL");
+
                     b.ToTable("Statistics");
                 });
 
@@ -353,13 +355,7 @@ namespace ClubManagement.Migrations
                         .HasForeignKey("ClubManagement.Models.Footballer", "AccountId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("ClubManagement.Models.Statistics", "Statistics")
-                        .WithOne("Footballer")
-                        .HasForeignKey("ClubManagement.Models.Footballer", "StatisticsId");
-
                     b.Navigation("Account");
-
-                    b.Navigation("Statistics");
                 });
 
             modelBuilder.Entity("ClubManagement.Models.IndividualTraining", b =>
@@ -369,6 +365,16 @@ namespace ClubManagement.Migrations
                         .HasForeignKey("FootballerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Footballer");
+                });
+
+            modelBuilder.Entity("ClubManagement.Models.Statistics", b =>
+                {
+                    b.HasOne("ClubManagement.Models.Footballer", "Footballer")
+                        .WithOne("Statistics")
+                        .HasForeignKey("ClubManagement.Models.Statistics", "FootballerId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Footballer");
                 });
@@ -413,11 +419,8 @@ namespace ClubManagement.Migrations
             modelBuilder.Entity("ClubManagement.Models.Footballer", b =>
                 {
                     b.Navigation("IndividualTrainings");
-                });
 
-            modelBuilder.Entity("ClubManagement.Models.Statistics", b =>
-                {
-                    b.Navigation("Footballer")
+                    b.Navigation("Statistics")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

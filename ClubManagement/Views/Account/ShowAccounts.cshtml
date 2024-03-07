@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Account>
+
+<div>
+    <h1>Lista kont</h1>
+    <p><a asp-controller="home" asp-action="index">Powrót</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<table>
+    <thead>
+        <tr>     
+            <th>@Html.DisplayNameFor(n => n.Id)</th>
+            <th>@Html.DisplayNameFor(n => n.AccountName)</th>
+            <th>@Html.DisplayNameFor(n => n.Role)</th>
+            <th>@Html.DisplayNameFor(n => n.PasswordHash)</th>
+            <th>@Html.DisplayNameFor(n => n.Salt)</th>
+            @* <th>@Html.DisplayNameFor(n => n.FootballerId)</th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in @Model)
+        {
+            <tr>
+                <td>@obj.Id</td>
+                <td>@obj.AccountName</td>
+                <td>@obj.Role</td>
+                <td>@obj.PasswordHash</td>
+                <td>@obj.Salt</td>
+                @* <td>@obj.FootballerId</td> *@
+                <td>
+                    <a class="nav-link text-dark" asp-controller="Account" asp-action="EditAccount" asp-route-id="@obj.Id" asp-route-type="accountName">Edytuj nazwę konta</a>
+                </td>
+                <td>
+                    <a class="nav-link text-dark" asp-controller="Account" asp-action="EditAccount" asp-route-id="@obj.Id" asp-route-type="password">Edytuj hasło</a>
+                </td>
+                <td>
+                    <a class="nav-link text-dark" asp-controller="Account" asp-action="RemoveAccount" asp-route-id="@obj.Id">Usuń konto</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

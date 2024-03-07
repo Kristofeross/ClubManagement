@@ -1,0 +1,80 @@
+﻿@model Footballer
+
+<style>
+    button, .fields
+    {
+        display: block;
+    }
+</style>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<div>
+    <h1>Dodanie nowego piłkarza</h1>
+    <p><a asp-controller="player" asp-action="index">Powrót</a></p>
+</div>
+<form method="post">
+    <input type="hidden" asp-for="AccountId" value="@ViewBag.AccountId" />
+    <div class="fields">
+        <label asp-for="Name">Imię</label>
+        <input type="text" asp-for="Name" />
+    </div>
+    <div class="fields">
+        <label asp-for="LastName">Nazwisko</label>
+        <input type="text" asp-for="LastName" />
+    </div>
+    <div class="fields">
+        <label asp-for="Country">Kraj</label>
+        <input type="text" asp-for="Country" />
+    </div>
+    <div class="fields">
+        <label asp-for="DateOfBirth">Data Urodzenia</label>
+        <input type="date" asp-for="DateOfBirth" />
+    </div>
+    <div class="fields">
+        <label asp-for="Growth">Wzrost</label>
+        <input type="number" asp-for="Growth" />cm
+    </div>
+    <div class="fields">
+        <label asp-for="Weight">Waga</label>
+        <input type="number" asp-for="Weight" />kg
+    </div>
+    <div class="fields">
+        <label asp-for="Position">Pozycja</label>
+        <select asp-for="Position">
+            <option>Bramkarz</option>
+            <option>Obrońca</option>
+            <option>Pomocnik</option>
+            <option>Napastnik</option>
+            @* <option>Lewy Obrońca</option>
+            <option>Środkowy Obrońca</option>
+            <option>Prawy Obrońca</option>
+            <option>Lewy Pomocnik</option>
+            <option>Środkowy Pomocnik</option>
+            <option>Defensywny Pomocnik</option>
+            <option>Ofensywny Pomocnik</option>
+            <option>Prawy Pomocnik</option>
+            <option>Środkowy Napastnik</option>
+            <option>Lewoskrzydłowy Napastnik</option>
+            <option>Prawoskrzydłowy Napastnik</option> *@
+        </select>
+    </div>
+    <div class="fields">
+        <label asp-for="PlayerNumber">Numer zawodnika</label>
+        <input type="number" asp-for="PlayerNumber" />
+    </div>
+    <div class="fields">
+        <label asp-for="WhichFoot">Dominująca noga</label>
+        <select asp-for="WhichFoot">
+            <option>Prawa</option>
+            <option>Lewa</option>
+            <option>Obunożny</option>
+        </select>
+    </div>
+    <button type="submit">
+        Dodaj zawodnika
+    </button>
+</form>

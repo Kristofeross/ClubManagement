@@ -6,7 +6,6 @@ namespace ClubManagement.Models
     public class Statistics
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Match { get; set; }
         public int Minutes { get; set; }
@@ -15,7 +14,8 @@ namespace ClubManagement.Models
         public int YellowCards { get; set; }
         public int RedCards { get; set; }
         // Footballer - Statistics | One to one
-        public int FootballerId { get; set; }
+        public int? FootballerId { get; set; }
         public Footballer Footballer { get; set; }
+        //public Footballer Footballer { get; set; } = null!;
     }
 }

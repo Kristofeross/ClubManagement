@@ -5,7 +5,7 @@ using ClubManagement.Models;
 using ClubManagement.Services;
 using Microsoft.AspNetCore.Identity;
 using FluentValidation;
-using ClubManagement.Models.Validators;
+//using ClubManagement.Models.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +30,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         // tutaj dodaj œcie¿kê na któr¹ zostanie przekierowany u¿ytkownik jeœli spróbuje dostaæ siê do zasobów bez uwierzytelnienia
-        options.LoginPath = "/account/loginAccount";
+        options.LoginPath = "/account/login";
+        options.AccessDeniedPath = "/home/accessDenied";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
 /*Podsumowuj¹c, kod ten definiuje dwie polityki autoryzacji: jedn¹ wymagaj¹c¹, aby u¿ytkownik by³ zalogowany (RequireLoggedIn), a drug¹ wymagaj¹c¹, aby u¿ytkownik by³ zalogowany i mia³ przypisan¹ rolê "Admin" (AdminAccess). Te polityki s¹ wykorzystywane do kontrolowania dostêpu u¿ytkowników do ró¿nych zasobów w aplikacji, w zale¿noœci od ich stanu uwierzytelnienia i roli.*/
@@ -77,8 +78,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

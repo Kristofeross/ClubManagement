@@ -39,9 +39,10 @@ namespace ClubManagement.Controllers
         [Authorize(Policy = "AdminAccess")]
         public IActionResult AddAccount([FromForm] Account model)
         {
-            if (_context.Accounts.Any(a => a.Email == model.Email))
+            
+            if (_context.Accounts.Any(a => a.AccountName == model.AccountName))
             {
-                TempData["Alert"] = "Taki email jest już zajęty";
+                TempData["Alert"] = "Taka nazwa jest już zajęta";
                 return RedirectToAction("Register");
             }
             else
@@ -49,32 +50,37 @@ namespace ClubManagement.Controllers
                 string salt = BCrypt.Net.BCrypt.GenerateSalt();
 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash, salt);
-
-                _context.Accounts.Add(new Account
+                var account = new Account
                 {
-                    Email = model.Email,
+                    AccountName = model.AccountName,
                     PasswordHash = hashedPassword,
                     Salt = salt,
                     Role = model.Role
-                    //Role = model.Role
-                });
+                };
+
+                _context.Accounts.Add(account);
                 _context.SaveChanges();
 
-                return RedirectToAction("Index", "Home");
+                if (model.Role == "Player")
+                    return RedirectToAction("AddPlayer", "Player", new { accountId = account.Id });
+                else if (model.Role == "Coach")
+                    return RedirectToAction("AddCoach", "Coach");
+                else
+                    return RedirectToAction("Index", "Home");
             }
         }
 
         [HttpPost("loginAccount")]
         public async Task<IActionResult> LoginAccount([FromForm] Account model)
         {
-            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Email == model.Email);
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountName == model.AccountName);
 
             if (account != null && BCrypt.Net.BCrypt.Verify(model.PasswordHash, account.PasswordHash))
             {
                 var claims = new List<Claim>
                 {
-                    //new Claim(ClaimTypes.Name, account.Email),
-                    new Claim(ClaimTypes.NameIdentifier, account.Email),
+                    new Claim(ClaimTypes.Name, account.AccountName),
+                    //new Claim(ClaimTypes.NameIdentifier, account.Email),
                     new Claim(ClaimTypes.Role, account.Role)
                 };
 
@@ -102,5 +108,115 @@ namespace ClubManagement.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // Show, edit, delete account
+
+        [HttpGet("showAccounts")]
+        [Authorize(Policy = "AdminAccess")]
+        public IActionResult ShowAccounts()
+        {
+            IEnumerable<Account> accounts = _context.Accounts;
+            return View(accounts);
+        }
+
+        [HttpGet("editAccount")]
+        [Authorize(Policy = "LoggedInAccess")]
+        public IActionResult EditAccount(int? id, string? type)
+        {
+            if (id == null || id == 0 || type == null || type == "")
+                return NotFound();
+
+            var obj = _context.Accounts.FirstOrDefault(x => x.Id == id);
+
+            if (obj == null)
+                return NotFound();
+
+            if(type == "accountName")
+            {
+                ViewBag.editAction = type;
+                ViewBag.editTitle = "Zmiana nazwy użytkownika";
+            }
+            else
+            {
+                ViewBag.editAction = type;
+                ViewBag.editTitle = "Zmiana hasła użytkownika";
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost("editAccountName")]
+        [Authorize(Policy = "LoggedInAccess")]
+        public IActionResult EditAccountName([FromForm] Account model)
+        {
+            if (_context.Accounts.Any(a => a.AccountName == model.AccountName))
+            {
+                TempData["Alert"] = "Taka nazwa jest już zajęta";
+                return RedirectToAction("EditAccount", new { id = model.Id, type = "accountName" });
+            }
+            else
+            {
+                var account = _context.Accounts.FirstOrDefault(x => x.Id == model.Id);
+                if (account == null)
+                    return NotFound();
+
+                account.AccountName = model.AccountName;           
+
+                _context.Accounts.Update(account);
+                _context.SaveChanges();
+
+                return RedirectToAction("ShowAccounts");
+            }
+        }
+
+        [HttpPost("editPassword")]
+        [Authorize(Policy = "LoggedInAccess")]
+        public IActionResult EditPassword([FromForm] Account model)
+        {
+
+            var account = _context.Accounts.FirstOrDefault(x => x.Id == model.Id);
+            if (account == null)
+                return NotFound();
+
+            if (BCrypt.Net.BCrypt.Verify(model.PasswordHash, account.PasswordHash))
+            {
+                TempData["Alert"] = "Podane hasło jest takie same jak poprzdnie";
+                return RedirectToAction("EditAccount", new { id = model.Id, type = "password" });
+            }
+            else
+            {
+                string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash, salt);
+
+                account.PasswordHash = hashedPassword;
+            }
+                
+            _context.Accounts.Update(account);
+            _context.SaveChanges();
+
+            return RedirectToAction("ShowAccounts");         
+        }
+
+        [HttpGet("removeAccount")]
+        [Authorize(Policy = "AdminAccess")]
+        public IActionResult RemoveAccount(int id)
+        {
+
+            var objToRemove = _context.Accounts.FirstOrDefault(a => a.Id == id);
+            if (objToRemove == null)
+                return NotFound();
+
+            if(objToRemove.AccountName != HttpContext.User.Identity.Name)
+            {
+                _context.Accounts.Remove(objToRemove);
+                _context.SaveChanges();
+
+                return RedirectToAction("showAccounts", "Account");
+            }
+            else
+            {
+                TempData["Alert"] = "Nie możesz usunąć konta na, którym jesteś aktualnie zalogowany";
+                return RedirectToAction("ShowAccounts", "Account");
+            }
+        }
     }
 }

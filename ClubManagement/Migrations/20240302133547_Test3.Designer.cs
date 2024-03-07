@@ -4,6 +4,7 @@ using ClubManagement.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    partial class ClubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240302133547_Test3")]
+    partial class Test3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,12 +32,12 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AccountName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CoachId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("FootballerId")
                         .HasColumnType("int");
@@ -102,7 +104,7 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AccountId")
+                    b.Property<int>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<int>("Age")
@@ -133,7 +135,7 @@ namespace ClubManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StatisticsId")
+                    b.Property<int>("StatisticsId")
                         .HasColumnType("int");
 
                     b.Property<float>("Weight")
@@ -146,12 +148,10 @@ namespace ClubManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId")
-                        .IsUnique()
-                        .HasFilter("[AccountId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("StatisticsId")
-                        .IsUnique()
-                        .HasFilter("[StatisticsId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Footballers");
                 });
@@ -269,7 +269,7 @@ namespace ClubManagement.Migrations
                     b.Property<int>("Assists")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FootballerId")
+                    b.Property<int>("FootballerId")
                         .HasColumnType("int");
 
                     b.Property<int>("Goals")
@@ -351,11 +351,14 @@ namespace ClubManagement.Migrations
                     b.HasOne("ClubManagement.Models.Account", "Account")
                         .WithOne("Footballer")
                         .HasForeignKey("ClubManagement.Models.Footballer", "AccountId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClubManagement.Models.Statistics", "Statistics")
                         .WithOne("Footballer")
-                        .HasForeignKey("ClubManagement.Models.Footballer", "StatisticsId");
+                        .HasForeignKey("ClubManagement.Models.Footballer", "StatisticsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
 

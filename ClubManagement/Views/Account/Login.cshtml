@@ -6,9 +6,13 @@
     </div>
 }
 <form method="post" asp-action="LoginAccount">
-    <div>
+    @* <div>
         <label>E-mail:</label>
         <input type="text" name="Email" required />
+    </div> *@
+    <div>
+        <label>AccountName:</label>
+        <input type="text" name="AccountName" required />
     </div>
     <div>
         <label>Password:</label>
@@ -19,4 +23,3 @@
     </div>
 </form>
 <br />
-<a asp-controller="Account" asp-action="Register">Register new account</a>

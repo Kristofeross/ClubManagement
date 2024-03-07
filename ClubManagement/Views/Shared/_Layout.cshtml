@@ -14,26 +14,35 @@
             <div class="container-fluid">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @* Powyżej jest to wzór poniżej mamy moje własne zaiplikowanie *@ 
-                        @* User.Identity.IsAuthenticated && User.IsInRole("Admin") *@
-                        @if (ViewContext.HttpContext.User.Identity.IsAuthenticated)
+                        @* @if(User.Identity.IsAuthenticated && User.IsInRole("Admin")) *@
+                        @* @if(User.Identity.IsAuthenticated) *@
+                        @if (ViewContext.HttpContext.User.Identity.IsAuthenticated) @* Tej używałem *@
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="LogoutAccount">Logout</a>
+                            </li>
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="ShowAccounts">Lista kont</a>
+                                </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="LogoutAccount">Logout</a>
-                            </li>
                         }
                         else
                         {    
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-controller="account" asp-action="Login">Login</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="player" asp-action="index">Piłkarze</a>
+                        </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                        </li> *@
 
                     </ul>
                 </div>

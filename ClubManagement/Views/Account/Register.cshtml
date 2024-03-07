@@ -7,13 +7,17 @@
 }
 <p>Register</p>
 <form method="post" asp-action="AddAccount">
-    <div>
+    @* <div>
         <label>Mail:</label>
         <input type="email" name="Email" required />
+    </div> *@
+    <div>
+        <label asp-for="AccountName">AccountName:</label>
+        <input type="text" asp-for="AccountName" required />
     </div>
     <div>
-        <label>Hasło:</label>
-        <input type="password" name="PasswordHash" @* pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!\u0040#$%^&*_=+-.,]).{8,}$" *@ required />
+        <label asp-for="PasswordHash">Hasło:</label>
+        <input type="password" asp-for="PasswordHash" required />
     </div>
     <div>
         <label>Rola:</label>

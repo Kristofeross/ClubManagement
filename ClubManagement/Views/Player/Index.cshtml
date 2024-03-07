@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Footballer>
+@section Scripts {
+    <script>
+        // Napisany w jquery
+        /*(document).ready(function () {
+            $(".toggle-details-btn").click(function () {
+                var footballerId = $(this).data("footballer-id");
+                $("#details-" + footballerId).toggle();
+            });
+
+            $(".toggle-stats-btn").click(function () {
+                var footballerId = $(this).data("footballer-id");
+                $("#stats-" + footballerId).toggle();
+            });
+        });*/
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var toggleDetailButtons = document.querySelectorAll(".toggle-details-btn");
+            toggleDetailButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var footballerId = this.getAttribute("data-footballer-id");
+                    var detailsDiv = document.getElementById("details-" + footballerId);
+                    if (detailsDiv) {
+                        if (detailsDiv.style.display === "none") {
+                            detailsDiv.style.display = "block";
+                        } else {
+                            detailsDiv.style.display = "none";
+                        }
+                    }
+                });
+            });
+
+            var toggleStatsButtons = document.querySelectorAll(".toggle-stats-btn");
+            toggleStatsButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    var footballerId = this.getAttribute("data-footballer-id");
+                    var statsDiv = document.getElementById("stats-" + footballerId);
+                    if (statsDiv) {
+                        if (statsDiv.style.display === "none") {
+                            statsDiv.style.display = "block";
+                        } else {
+                            statsDiv.style.display = "none";
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<div>
+    <h1>Lista piłkarzy</h1>
+    <p><a asp-controller="home" asp-action="index">Powrót</a></p>
+</div>
+@* <table>
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(n => n.Name)</th>
+            <th>@Html.DisplayNameFor(n => n.LastName)</th>
+            <th>@Html.DisplayNameFor(n => n.Country)</th>
+            <th>@Html.DisplayNameFor(n => n.Age)</th>
+            <th>@Html.DisplayNameFor(n => n.DateOfBirth)</th>
+            <th>@Html.DisplayNameFor(n => n.Growth)</th>
+            <th>@Html.DisplayNameFor(n => n.Weight)</th>
+            <th>@Html.DisplayNameFor(n => n.Position)</th>
+            <th>@Html.DisplayNameFor(n => n.PlayerNumber)</th>
+            <th>@Html.DisplayNameFor(n => n.WhichFoot)</th>
+            <th>Edytuj</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var obj in @Model)
+        {
+            <tr>
+                <td>@obj.Name</td>
+                <td>@obj.LastName</td>
+                <td>@obj.Country</td>
+                <td>@obj.Age</td>
+                <td>@obj.DateOfBirth.ToString("dd.mm.yyyy")</td>
+                <td>@($"{@obj.Growth}cm")</td>
+                <td>@($"{@obj.Weight}kg")</td>
+                <td>@obj.Position</td>
+                <td>@obj.PlayerNumber</td>
+                <td>@obj.WhichFoot</td>
+                <td>
+                    <a class="nav-link text-dark" asp-controller="player" asp-action="changePlayer" asp-route-id="@obj.Id">Edytuj piłkarza</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+<div>
+    @foreach (var obj in @Model)
+    {
+        <div>
+            @obj.Name @obj.LastName
+            <button class="toggle-details-btn" data-footballer-id="@obj.Id">Pokaż/Ukryj szczegóły</button>
+            <div class="details hidden" id="details-@obj.Id">
+                Data urodzenia - @obj.DateOfBirth | Kraj - @obj.Country <br>
+                Wzrost - @($"{@obj.Growth}cm") | Waga - @($"{@obj.Weight}kg") 
+                Pozycja - @obj.Position | Dominująca noga - @obj.WhichFoot | Numer zawodnika - @obj.PlayerNumber
+            </div>
+            <button class="toggle-stats-btn" data-footballer-id="@obj.Id">Pokaż/Ukryj statystyki</button>
+            <div class="stats hidden" id="stats-@obj.Id">
+                Ilość meczów - @obj.Statistics.Match | Ilość minut - @obj.Statistics.Minutes
+            </div>
+            <div>
+                <a class="nav-link text-dark" asp-controller="Player" asp-action="EditPlayer" asp-route-id="@obj.Id">Edytuj piłkarza</a>
+            </div>
+            <div>
+                <a class="nav-link text-dark" asp-controller="Player" asp-action="RemovePlayer" asp-route-id="@obj.Id">Usuń piłkarza</a>
+            </div>
+        </div>
+    }
+</div>
+<div>
+    <a class="nav-link text-dark" asp-controller="player" asp-action="addPlayer">Dodaj nowego piłkarza</a>
+</div>
