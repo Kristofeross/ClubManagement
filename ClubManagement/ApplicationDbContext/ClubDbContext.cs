@@ -34,17 +34,18 @@ namespace ClubManagement.ApplicationDbContext
                 .HasForeignKey<Coach>(c => c.AccountId);
 
             /*Encje do piłkarzy*/
+
             // Statistics 1-1 Footballer
-            modelBuilder.Entity<Statistics>()
+            /*modelBuilder.Entity<Statistics>()
                 .HasOne(s => s.Footballer)
                 .WithOne(f => f.Statistics)
-                .HasForeignKey<Footballer>(s => s.StatisticsId);
+                .HasForeignKey<Footballer>(s => s.StatisticsId);*/
             // ta wersja jest co nie ma połączenia przez id z pilkarzem
-            /*modelBuilder.Entity<Footballer>()
+            modelBuilder.Entity<Footballer>()
                 .HasOne(f => f.Statistics)
                 .WithOne(s => s.Footballer)
                 .HasForeignKey<Statistics>(s => s.FootballerId)
-                .OnDelete(DeleteBehavior.Cascade);// Kasuje rekordy Statistics po usunięciu Footballer*/
+                .OnDelete(DeleteBehavior.Cascade);// Kasuje rekordy Statistics po usunięciu Footballer
 
             // Footballer 1-* IndividualTraining
             modelBuilder.Entity<IndividualTraining>()

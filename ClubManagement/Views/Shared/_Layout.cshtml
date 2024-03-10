@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var userName = User.Identity.Name;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,9 +22,16 @@
                         @* @if(User.Identity.IsAuthenticated) *@
                         @if (ViewContext.HttpContext.User.Identity.IsAuthenticated) @* Tej używałem *@
                         {
+                            <li>@userName</li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="LogoutAccount">Logout</a>
                             </li>
+                            @if (!User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="plan" asp-action="index">Plan</a>
+                                </li>
+                            }
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
@@ -39,6 +50,9 @@
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="player" asp-action="index">Piłkarze</a>
+                       </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Statistics" asp-action="ShowStatistics">Statystyki</a>
                         </li>
                         @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>

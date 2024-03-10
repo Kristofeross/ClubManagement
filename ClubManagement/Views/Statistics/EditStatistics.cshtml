@@ -1,0 +1,43 @@
+﻿@model Footballer;
+
+<div>
+    <h1>Edycja staystyk</h1>
+    <p><a asp-controller="statistics" asp-action="ShowStatistics">Powrót</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<form method="post" asp-action="EditStatistics">
+    <input type="hidden" asp-for="Statistics.Id" />
+    <input type="hidden" asp-for="Statistics.FootballerId" />
+
+    @* <div class="fields">
+        <label asp-for="Statistics.Match">Mecze</label>
+        <input type="number" asp-for="Statistics.Match" />
+    </div> *@
+    <div class="fields">
+        <label asp-for="Statistics.Minutes">Minuty</label>
+        <input type="text" asp-for="Statistics.Minutes" value="0" />
+    </div>
+    <div class="fields">
+        <label asp-for="Statistics.Goals">Gole</label>
+        <input type="text" asp-for="Statistics.Goals" value="0" />
+    </div>
+    <div class="fields">
+        <label asp-for="Statistics.Assists">Asysty</label>
+        <input type="text" asp-for="Statistics.Assists" value="0" />
+    </div>
+    <div class="fields">
+        <label asp-for="Statistics.YellowCards">Źółte kartki</label>
+        <input type="text" asp-for="Statistics.YellowCards" value="0" />
+    </div>
+    <div class="fields">
+        <label asp-for="Statistics.RedCards">Czerwone kartki</label>
+        <input type="text" asp-for="Statistics.RedCards" value="0" />
+    </div>
+  
+    <button type="submit">Edytuj statystyki</button>
+</form>

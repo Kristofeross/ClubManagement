@@ -96,6 +96,12 @@
         }
     </tbody>
 </table> *@
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success ">
+        @TempData["Success"]
+    </div>
+}
 <div>
     @foreach (var obj in @Model)
     {
@@ -107,15 +113,13 @@
                 Wzrost - @($"{@obj.Growth}cm") | Waga - @($"{@obj.Weight}kg") 
                 Pozycja - @obj.Position | Dominująca noga - @obj.WhichFoot | Numer zawodnika - @obj.PlayerNumber
             </div>
-            <button class="toggle-stats-btn" data-footballer-id="@obj.Id">Pokaż/Ukryj statystyki</button>
+            @* <button class="toggle-stats-btn" data-footballer-id="@obj.Id">Pokaż/Ukryj statystyki</button>
             <div class="stats hidden" id="stats-@obj.Id">
                 Ilość meczów - @obj.Statistics.Match | Ilość minut - @obj.Statistics.Minutes
-            </div>
+            </div> *@
             <div>
-                <a class="nav-link text-dark" asp-controller="Player" asp-action="EditPlayer" asp-route-id="@obj.Id">Edytuj piłkarza</a>
-            </div>
-            <div>
-                <a class="nav-link text-dark" asp-controller="Player" asp-action="RemovePlayer" asp-route-id="@obj.Id">Usuń piłkarza</a>
+                <a class="text-dark" asp-controller="Player" asp-action="EditPlayer" asp-route-id="@obj.Id">Edytuj piłkarza</a>
+                <a class="text-dark" asp-controller="Player" asp-action="RemovePlayer" asp-route-id="@obj.Id">Usuń piłkarza</a>
             </div>
         </div>
     }

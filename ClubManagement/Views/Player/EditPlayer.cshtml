@@ -16,6 +16,8 @@
 }
 <form method="post" asp-action="EditPlayer">
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="AccountId" />
+
     <div class="fields">
         <label asp-for="Name">Imię</label>
         <input type="text" asp-for="Name" />

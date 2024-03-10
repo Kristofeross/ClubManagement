@@ -69,7 +69,7 @@ namespace ClubManagement.Controllers
                 _context.SaveChanges();
 
                 // Id do stytystyk
-                statistics.FootballerId = footballer.Id;
+                //statistics.FootballerId = footballer.Id;
                 // Id do account
                 var accountId = _context.Accounts.FirstOrDefault(a => a.Id == footballer.AccountId);
                 if (accountId == null)
@@ -77,7 +77,7 @@ namespace ClubManagement.Controllers
 
                 accountId.FootballerId = footballer.Id;
                 _context.Accounts.Update(accountId);
-                _context.Statistics.Update(statistics);
+                //_context.Statistics.Update(statistics);
                 _context.SaveChanges();
 
                 return RedirectToAction("Index", "Player");
@@ -104,8 +104,31 @@ namespace ClubManagement.Controllers
         [Authorize(Policy = "AdminAccess")]
         public IActionResult EditPlayer([FromForm]Footballer footballer)
         {
-            _context.Footballers.Update(footballer);
+            var footballerToEdit = _context.Footballers.FirstOrDefault(x => x.Id == footballer.Id);
+            if (footballerToEdit == null)
+                return NotFound();
+
+            // Jeśli ktoś posiada już taki numer oraz jest to inna osoba niż edytowany zawodnik
+            if (_context.Footballers.Any(f => f.PlayerNumber == footballer.PlayerNumber && f.Id != footballer.Id))
+            {
+                TempData["Alert"] = "Numer zawodnika jest już zajęty";
+                return RedirectToAction("EditPlayer", new { id = footballer.Id });
+            }
+
+            // Na razie tak błędy komplikuje instancja footballerToedit
+            footballerToEdit.Name = footballer.Name;
+            footballerToEdit.LastName = footballer.LastName;
+            footballerToEdit.Country = footballer.Country;
+            footballerToEdit.DateOfBirth = footballer.DateOfBirth;
+            footballerToEdit.Growth = footballer.Growth;
+            footballerToEdit.Weight = footballer.Weight;
+            footballerToEdit.Position = footballer.Position;
+            footballerToEdit.PlayerNumber = footballer.PlayerNumber;
+            footballerToEdit.WhichFoot = footballer.WhichFoot;
+
+            //_context.Footballers.Update(footballerToEdit);
             _context.SaveChanges();
+            TempData["Success"] = "Pomyślnie zaktualizowano gracza";
             return RedirectToAction("Index");
         }
 
@@ -114,27 +137,17 @@ namespace ClubManagement.Controllers
         [Authorize(Policy = "AdminAccess")]
         public IActionResult RemovePlayer(int id)
         {
-            // Wersja w chuj niezoptymalizowana
-            var footballerToRemove = _context.Footballers.FirstOrDefault(f => f.Id == id);
-            if (footballerToRemove == null)
-                return NotFound();
-            var statisticsToRemove = _context.Statistics.FirstOrDefault(f => f.Id == footballerToRemove.StatisticsId);
-            var accountToRemove = _context.Accounts.FirstOrDefault(f => f.Id == footballerToRemove.AccountId);
-            if (statisticsToRemove == null || accountToRemove == null)
-                return NotFound();
+            var footballerToRemove = _context.Footballers.Include(f => f.Statistics).FirstOrDefault(f => f.Id == id);
+            if (footballerToRemove != null)
+                _context.Footballers.Remove(footballerToRemove);
+            else
+                return RedirectToAction("Index");
 
-            _context.Footballers.Remove(footballerToRemove);
-            _context.Statistics.Remove(statisticsToRemove);
-            _context.Accounts.Remove(accountToRemove);
+            var accountToRemove = _context.Accounts.FirstOrDefault(a => a.Id == footballerToRemove.AccountId);
+            if (accountToRemove != null)
+                _context.Accounts.Remove(accountToRemove);
+
             _context.SaveChanges();
-
-            // Wersja zoptymalizowana ale nie wiem czy działa jeszcze to zadział ale trzeba zmienić modelBuilder
-            /*var footballerToRemove = _context.Footballers.Include(f => f.Statistics).Include(f => f.Account).FirstOrDefault(f => f.Id == id);
-            if (footballerToRemove == null)
-                return NotFound();
-
-            _context.Footballers.Remove(footballerToRemove);
-            _context.SaveChanges();*/
 
             return RedirectToAction("Index");
         }

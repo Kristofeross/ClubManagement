@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Footballer>
+
+<div>
+    <h1>Statystyki piłkarzy</h1>
+    <p><a asp-controller="home" asp-action="index">Powrót</a></p>
+</div>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success ">
+        @TempData["Success"]
+    </div>
+}
+<div>
+    <ul>
+        @foreach(var obj in Model)
+        {
+            <li>
+                @obj.Name @obj.LastName
+                <table>
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(n => n.Statistics.Match)</th>
+                            <th>@Html.DisplayNameFor(n => n.Statistics.Minutes)</th>
+                            <th>@Html.DisplayNameFor(n => n.Statistics.Goals)</th>
+                            <th>@Html.DisplayNameFor(n => n.Statistics.Assists)</th>
+                            <th>@Html.DisplayNameFor(n => n.Statistics.YellowCards)</th>
+                            <th>@Html.DisplayNameFor(n => n.Statistics.RedCards)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>@obj.Statistics.Match</td>
+                            <td>@obj.Statistics.Minutes</td>
+                            <td>@obj.Statistics.Goals</td>
+                            <td>@obj.Statistics.Assists</td>
+                            <td>@obj.Statistics.YellowCards</td>
+                            <td>@obj.Statistics.RedCards</td>
+                            <td>
+                                <a class="nav-link text-dark" asp-controller="Statistics" asp-action="EditStatistics" asp-route-id="@obj.Id">Edytuj statystyki</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        }
+    </ul>
+</div>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    [Migration("20240303174453_Test4")]
-    partial class Test4
+    [Migration("20240307115456_T1")]
+    partial class T1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,12 +32,12 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CoachId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("AccountName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CoachId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("FootballerId")
                         .HasColumnType("int");
@@ -135,9 +135,6 @@ namespace ClubManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StatisticsId")
-                        .HasColumnType("int");
-
                     b.Property<float>("Weight")
                         .HasColumnType("real");
 
@@ -150,10 +147,6 @@ namespace ClubManagement.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique()
                         .HasFilter("[AccountId] IS NOT NULL");
-
-                    b.HasIndex("StatisticsId")
-                        .IsUnique()
-                        .HasFilter("[StatisticsId] IS NOT NULL");
 
                     b.ToTable("Footballers");
                 });
@@ -272,6 +265,7 @@ namespace ClubManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("FootballerId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("Goals")
@@ -290,6 +284,9 @@ namespace ClubManagement.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FootballerId")
+                        .IsUnique();
 
                     b.ToTable("Statistics");
                 });
@@ -352,15 +349,10 @@ namespace ClubManagement.Migrations
                 {
                     b.HasOne("ClubManagement.Models.Account", "Account")
                         .WithOne("Footballer")
-                        .HasForeignKey("ClubManagement.Models.Footballer", "AccountId");
-
-                    b.HasOne("ClubManagement.Models.Statistics", "Statistics")
-                        .WithOne("Footballer")
-                        .HasForeignKey("ClubManagement.Models.Footballer", "StatisticsId");
+                        .HasForeignKey("ClubManagement.Models.Footballer", "AccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Account");
-
-                    b.Navigation("Statistics");
                 });
 
             modelBuilder.Entity("ClubManagement.Models.IndividualTraining", b =>
@@ -368,6 +360,17 @@ namespace ClubManagement.Migrations
                     b.HasOne("ClubManagement.Models.Footballer", "Footballer")
                         .WithMany("IndividualTrainings")
                         .HasForeignKey("FootballerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Footballer");
+                });
+
+            modelBuilder.Entity("ClubManagement.Models.Statistics", b =>
+                {
+                    b.HasOne("ClubManagement.Models.Footballer", "Footballer")
+                        .WithOne("Statistics")
+                        .HasForeignKey("ClubManagement.Models.Statistics", "FootballerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -414,11 +417,8 @@ namespace ClubManagement.Migrations
             modelBuilder.Entity("ClubManagement.Models.Footballer", b =>
                 {
                     b.Navigation("IndividualTrainings");
-                });
 
-            modelBuilder.Entity("ClubManagement.Models.Statistics", b =>
-                {
-                    b.Navigation("Footballer")
+                    b.Navigation("Statistics")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

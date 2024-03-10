@@ -7,6 +7,7 @@ namespace ClubManagement.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "Pełne mecze")]
         public int Match { get; set; }
         public int Minutes { get; set; }
         public int Goals { get; set; }

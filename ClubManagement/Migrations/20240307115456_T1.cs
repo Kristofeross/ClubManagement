@@ -5,25 +5,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ClubManagement.Migrations
 {
-    public partial class Test1 : Migration
+    public partial class T1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Coaches",
+                name: "Accounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    AccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FootballerId = table.Column<int>(type: "int", nullable: true),
+                    CoachId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Coaches", x => x.Id);
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,38 +64,6 @@ namespace ClubManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Statistics",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Match = table.Column<int>(type: "int", nullable: false),
-                    Minutes = table.Column<int>(type: "int", nullable: false),
-                    Goals = table.Column<int>(type: "int", nullable: false),
-                    Assists = table.Column<int>(type: "int", nullable: false),
-                    YellowCards = table.Column<int>(type: "int", nullable: false),
-                    RedCards = table.Column<int>(type: "int", nullable: false),
-                    FootballerId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Statistics", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Transfers",
                 columns: table => new
                 {
@@ -107,23 +76,25 @@ namespace ClubManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
+                name: "Coaches",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_Coaches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
+                        name: "FK_Coaches_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -141,20 +112,20 @@ namespace ClubManagement.Migrations
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Growth = table.Column<float>(type: "real", nullable: false),
                     Weight = table.Column<float>(type: "real", nullable: false),
-                    Position = table.Column<int>(type: "int", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PlayerNumber = table.Column<int>(type: "int", nullable: false),
-                    WhichFoot = table.Column<int>(type: "int", nullable: false),
-                    StatisticsId = table.Column<int>(type: "int", nullable: false)
+                    WhichFoot = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Footballers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Footballers_Statistics_StatisticsId",
-                        column: x => x.StatisticsId,
-                        principalTable: "Statistics",
+                        name: "FK_Footballers_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,10 +200,36 @@ namespace ClubManagement.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Statistics",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Match = table.Column<int>(type: "int", nullable: false),
+                    Minutes = table.Column<int>(type: "int", nullable: false),
+                    Goals = table.Column<int>(type: "int", nullable: false),
+                    Assists = table.Column<int>(type: "int", nullable: false),
+                    YellowCards = table.Column<int>(type: "int", nullable: false),
+                    RedCards = table.Column<int>(type: "int", nullable: false),
+                    FootballerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Statistics", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Statistics_Footballers_FootballerId",
+                        column: x => x.FootballerId,
+                        principalTable: "Footballers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Accounts_RoleId",
-                table: "Accounts",
-                column: "RoleId");
+                name: "IX_Coaches_AccountId",
+                table: "Coaches",
+                column: "AccountId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_FootballerGroupTraining_GroupTrainingsId",
@@ -245,22 +242,26 @@ namespace ClubManagement.Migrations
                 column: "MatchesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Footballers_StatisticsId",
+                name: "IX_Footballers_AccountId",
                 table: "Footballers",
-                column: "StatisticsId",
-                unique: true);
+                column: "AccountId",
+                unique: true,
+                filter: "[AccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndividualTraining_FootballerId",
                 table: "IndividualTraining",
                 column: "FootballerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Statistics_FootballerId",
+                table: "Statistics",
+                column: "FootballerId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Accounts");
-
             migrationBuilder.DropTable(
                 name: "Coaches");
 
@@ -274,10 +275,10 @@ namespace ClubManagement.Migrations
                 name: "IndividualTraining");
 
             migrationBuilder.DropTable(
-                name: "Transfers");
+                name: "Statistics");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Transfers");
 
             migrationBuilder.DropTable(
                 name: "GroupTraining");
@@ -289,7 +290,7 @@ namespace ClubManagement.Migrations
                 name: "Footballers");
 
             migrationBuilder.DropTable(
-                name: "Statistics");
+                name: "Accounts");
         }
     }
 }
