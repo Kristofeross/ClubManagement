@@ -1,0 +1,22 @@
+﻿@model Footballer;
+
+<div>
+    <div>
+        <h1>Plan zajęć @Model.Name @Model.LastName</h1>
+        <p>Konto @User.Identity.Name</p>
+        <p><a asp-controller="Home" asp-action="index">Powrót do menu głównego</a></p>
+    </div>
+
+    <div>
+        <ul>
+        @foreach(var obj in @Model.IndividualTrainings)
+        {
+            <li>
+                @obj.DateOfTraining.ToString("dd-MM-yyyy")<br>
+                @obj.StartTraining.ToString("HH:mm")godz. - @obj.EndTraining.ToString("HH:mm")godz. | @obj.Title | Details
+            </li>
+
+        }
+        </ul>
+    </div>
+</div>

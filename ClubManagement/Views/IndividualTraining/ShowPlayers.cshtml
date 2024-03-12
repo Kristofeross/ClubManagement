@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Footballer>;
+
+<div>
+    <h1>Lista piłkarzy</h1>
+    <p><a asp-controller="home" asp-action="index">Powrót</a></p>
+</div>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success ">
+        @TempData["Success"]
+    </div>
+}
+<div>
+    @foreach (var obj in @Model)
+    {
+        <div>
+            @obj.Name @obj.LastName -
+            <a class="text-dark" asp-controller="IndividualTraining" asp-action="ShowIT" asp-route-id="@obj.Id">Indywidualne treningi</a>
+        </div>
+    }
+</div>

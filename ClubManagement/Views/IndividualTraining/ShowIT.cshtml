@@ -1,0 +1,44 @@
+﻿@model Footballer;
+
+
+<div>
+    <h1>@Model.Name @Model.LastName - Lista Indywidualnych Treningów</h1>
+    <p><a asp-controller="IndividualTraining" asp-action="showPlayers">Powrót do listy zawodników</a></p>
+    <p><a asp-controller="IndividualTraining" asp-action="PrepareToAddIT" asp-route-id="@Model.Id">Dodaj trening</a></p>
+    <p><a asp-controller="IndividualTraining" asp-action="RemoveAllIT" asp-route-id="@Model.Id">Usuń wszystko</a></p>
+</div>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success ">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<div>
+    @foreach(var obj in @Model.IndividualTrainings)
+    {
+        <div>
+            @obj.DateOfTraining.ToString("dd-MM-yyyy")
+            @obj.StartTraining.ToString("HH:mm") - @obj.EndTraining.ToString("HH:mm")
+            | @obj.Title | Szczegóły |
+            <a asp-controller="IndividualTraining" asp-action="PrepareToEditIT" asp-route-id="@obj.Id">Edytuj</a> |
+            <a asp-controller="IndividualTraining" asp-action="RemoveIT" asp-route-id="@obj.Id">Usuń</a> 
+            <div>
+                @{
+                    TimeSpan czas = obj.TimeOfTraining;
+                    int godziny = czas.Hours;
+                    int minuty = czas.Minutes;
+                }
+                <div>Typ treningu: @obj.Type</div>
+                <div>Przewidywany czas: @godziny godz. @minuty min.</div>
+                <div>Opis: @(obj.Description == null ? "Brak": obj.Description)</div>
+                <div>Miejsce: @(obj.Place == null ? "Brak" : obj.Place)</div>
+            </div>
+        </div>
+    }
+</div>

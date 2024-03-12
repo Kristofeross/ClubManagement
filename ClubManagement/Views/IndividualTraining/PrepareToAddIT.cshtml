@@ -1,0 +1,48 @@
+﻿@model IndividualTraining;
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+
+<div>
+
+    <p><a asp-controller="IndividualTraining" asp-action="ShowIT" asp-route-id="@ViewBag.FootballerId">Powrót</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<form method="post" asp-action="AddIT">
+    <input type="hidden" asp-for="FootballerId" value="@ViewBag.FootballerId" />
+    <div class="fields">
+        <label asp-for="Title">Tytuł</label>
+        <input type="text" asp-for="Title" />
+    </div>
+    <div class="fields">
+        <label asp-for="Description">Opis</label>
+        <input type="text" asp-for="Description" />
+    </div>
+    <div class="fields">
+        <label asp-for="DateOfTraining">Data treningu</label>
+        <input type="date" asp-for="DateOfTraining" />
+    </div>
+    <div class="fields">
+        <label asp-for="StartTraining">Godzina rozpoczęcia</label>
+        <input type="time" asp-for="StartTraining" />
+    </div>
+    <div class="fields">
+        <label asp-for="EndTraining">Godzina zakończenia</label>
+        <input type="time" asp-for="EndTraining" />
+    </div>
+    <div class="fields">
+        <label asp-for="Place">Miejsce</label>
+        <input type="text" asp-for="Place" />
+    </div>
+    <button type="submit">
+        Dodaj Trening
+    </button>
+</form>

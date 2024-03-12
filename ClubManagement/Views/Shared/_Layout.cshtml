@@ -29,7 +29,7 @@
                             @if (!User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="plan" asp-action="index">Plan</a>
+                                    <a class="nav-link text-dark" asp-controller="plan" asp-action="ShowPlan">Plan</a>
                                 </li>
                             }
                             @if (User.IsInRole("Admin"))
@@ -57,6 +57,13 @@
                         @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
                         </li> *@
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="ShowAccounts">Treningi grupowe</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="IndividualTraining" asp-action="ShowPlayers">Treningi indywidualne</a>
+                        </li>
 
                     </ul>
                 </div>
