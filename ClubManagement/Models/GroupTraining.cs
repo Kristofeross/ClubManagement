@@ -6,14 +6,17 @@ namespace ClubManagement.Models
     public class GroupTraining
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public AgeCategoriesCopy AgeCategory { get; set; }
+        public string Type { get; set; } = "Grupowy";
+        public string AgeCategory { get; set; } = String.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Place { get; set; } = String.Empty;
         public DateTime DateOfTraining { get; set; }
         public DateTime StartTraining { get; set; }
         public DateTime EndTraining { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public TimeSpan TimeOfTraining { get; set; }
+
         // Footballer *-* GroupTraining
         public ICollection<Footballer> Footballers { get; set; } = new List<Footballer>();
     }

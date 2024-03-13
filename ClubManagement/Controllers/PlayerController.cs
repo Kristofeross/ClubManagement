@@ -26,17 +26,13 @@ namespace ClubManagement.Controllers
         // Add Footballer
         [HttpGet]
         [Authorize(Policy = "AdminAccess")]
-        public IActionResult AddPlayer(int accountId)
+        public IActionResult AddPlayer(int? accountId)
         {
-            if (accountId > 0)
-            {
+            if (accountId == null)
+                return RedirectToAction("register", "Account");
+            else
                 ViewBag.AccountId = accountId;
                 return View();
-            }
-            else
-            {
-                return RedirectToAction("register", "Account");
-            }
         }
 
         [HttpPost]
@@ -52,24 +48,12 @@ namespace ClubManagement.Controllers
             else
             {
                 // Domyślnie inicjuje zerami
-                /*var statistics = new Statistics
-                {
-                    Match = 0,
-                    Minutes = 0,
-                    Goals = 0,
-                    Assists = 0,
-                    YellowCards = 0,
-                    RedCards = 0,
-                };*/
-
                 var statistics = new Statistics();
                 footballer.Statistics = statistics;
 
                 _context.Footballers.Add(footballer);
                 _context.SaveChanges();
 
-                // Id do stytystyk
-                //statistics.FootballerId = footballer.Id;
                 // Id do account
                 var accountId = _context.Accounts.FirstOrDefault(a => a.Id == footballer.AccountId);
                 if (accountId == null)
@@ -77,7 +61,6 @@ namespace ClubManagement.Controllers
 
                 accountId.FootballerId = footballer.Id;
                 _context.Accounts.Update(accountId);
-                //_context.Statistics.Update(statistics);
                 _context.SaveChanges();
 
                 return RedirectToAction("Index", "Player");

@@ -36,7 +36,7 @@ namespace ClubManagement.Controllers
         }
 
         [HttpPost("addAccount")]
-        [Authorize(Policy = "AdminAccess")]
+        //[Authorize(Policy = "AdminAccess")]
         public IActionResult AddAccount([FromForm] Account model)
         {
             
@@ -102,6 +102,7 @@ namespace ClubManagement.Controllers
         }
 
         [HttpGet("logoutAccount")]
+        [Authorize(Policy = "LoggedInAccess")]
         public async Task<IActionResult> LogoutAccount()
         {
             await HttpContext.SignOutAsync();
@@ -201,13 +202,13 @@ namespace ClubManagement.Controllers
         public IActionResult RemoveAccount(int id)
         {
 
-            var objToRemove = _context.Accounts.FirstOrDefault(a => a.Id == id);
-            if (objToRemove == null)
+            var obj = _context.Accounts.FirstOrDefault(a => a.Id == id);
+            if (obj == null)
                 return NotFound();
 
-            if(objToRemove.AccountName != HttpContext.User.Identity.Name)
+            if(obj.AccountName != HttpContext.User.Identity.Name)
             {
-                _context.Accounts.Remove(objToRemove);
+                _context.Accounts.Remove(obj);
                 _context.SaveChanges();
 
                 return RedirectToAction("showAccounts", "Account");

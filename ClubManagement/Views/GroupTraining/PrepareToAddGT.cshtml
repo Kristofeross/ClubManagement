@@ -1,0 +1,71 @@
+﻿@model GroupTraining;
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+
+<div>
+    <h2>Dodaj trening grupowy</h2>
+    <p><a asp-controller="GroupTraining" asp-action="showGT">Powrót</a></p>
+</div>
+
+<div>
+    <form method="post" asp-action="AddGT">
+
+        <button type="submit">Dodaj trening grupowy</button>
+
+        <div class="fields">
+            <label asp-for="Title">Tytuł</label>
+            <input type="text" asp-for="Title" />
+        </div>
+        <div class="fields">
+            <label asp-for="Description">Opis</label>
+            <input type="text" asp-for="Description" />
+        </div>
+        <div class="fields">
+            <label asp-for="Place">Miejsce</label>
+            <input type="text" asp-for="Place" />
+        </div>
+        <div class="fields">
+            <label asp-for="DateOfTraining">Data treningu</label>
+            <input type="date" asp-for="DateOfTraining" />
+        </div>
+        <div class="fields">
+            <label asp-for="StartTraining">Godzina rozpoczęcia</label>
+            <input type="time" asp-for="StartTraining" />
+        </div>
+        <div class="fields">
+            <label asp-for="EndTraining">Godzina zakończenia</label>
+            <input type="time" asp-for="EndTraining" />
+        </div>
+        <div>
+            <label asp-for="AgeCategory">Kategoria wiekowa:</label>
+            <select asp-for="AgeCategory">
+                <option value="Seniorzy" selected>Seniorzy</option>
+                <option value="Rezerwy">Rezerwy</option>
+                <option value="Juniorzy">Juniorzy</option>
+                <option value="Trampkarze">Trampkarze</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Piłkarze</label>
+            @foreach (var footballer in ViewBag.Footballers)
+            {
+                <div>
+                    <input type="checkbox" name="selectedPlayers" value="@footballer.Id" checked />
+                    <label>@footballer.Name @footballer.LastName</label>
+                </div>
+            }
+        </div>
+    </form>
+</div>

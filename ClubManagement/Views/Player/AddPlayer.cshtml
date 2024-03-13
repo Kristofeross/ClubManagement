@@ -27,6 +27,15 @@
         <input type="text" asp-for="LastName" />
     </div>
     <div class="fields">
+        <label asp-for="AgeCategory">Kategoria wiekowa</label>
+        <select asp-for="AgeCategory">
+            <option value="firstTeam">Seniorzy</option>
+            <option value="reserves">Rezerwy</option>
+            <option value="u21">Juniorzy</option>
+            <option value="u18">Trampkarze</option>
+        </select>
+    </div>
+    <div class="fields">
         <label asp-for="Country">Kraj</label>
         <input type="text" asp-for="Country" />
     </div>

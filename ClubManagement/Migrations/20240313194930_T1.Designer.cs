@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    [Migration("20240311080000_T3")]
-    partial class T3
+    [Migration("20240313194930_T1")]
+    partial class T1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,10 @@ namespace ClubManagement.Migrations
                     b.Property<int?>("Age")
                         .HasColumnType("int");
 
+                    b.Property<string>("AgeCategory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
@@ -156,8 +160,9 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AgeCategory")
-                        .HasColumnType("int");
+                    b.Property<string>("AgeCategory")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateOfTraining")
                         .HasColumnType("datetime2");
@@ -169,10 +174,21 @@ namespace ClubManagement.Migrations
                     b.Property<DateTime>("EndTraining")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartTraining")
                         .HasColumnType("datetime2");
 
+                    b.Property<TimeSpan>("TimeOfTraining")
+                        .HasColumnType("time");
+
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -195,8 +211,8 @@ namespace ClubManagement.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("EndTraining")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("EndTraining")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("FootballerId")
                         .HasColumnType("int");
@@ -204,8 +220,8 @@ namespace ClubManagement.Migrations
                     b.Property<string>("Place")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("StartTraining")
-                        .HasColumnType("time");
+                    b.Property<DateTime>("StartTraining")
+                        .HasColumnType("datetime2");
 
                     b.Property<TimeSpan>("TimeOfTraining")
                         .HasColumnType("time");

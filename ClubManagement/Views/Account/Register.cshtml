@@ -20,8 +20,8 @@
         <input type="password" asp-for="PasswordHash" required />
     </div>
     <div>
-        <label>Rola:</label>
-        <select name="Role">
+        <label asp-for="Role">Rola:</label>
+        <select asp-for="Role">
             <option value="Player">Player</option>
             <option value="Coach">Coach</option>
             <option value="Admin">Admin</option>

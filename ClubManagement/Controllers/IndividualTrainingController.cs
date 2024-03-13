@@ -54,7 +54,7 @@ namespace ClubManagement.Controllers
             if (it.DateOfTraining.Date < now.Date ||
                 (it.DateOfTraining.Date == now.Date && it.StartTraining.TimeOfDay < now.TimeOfDay))
             {
-                TempData["Alert"] = "Data,godzina rozpoczęcia lub zakończenia treningu jest wcześniejsza niż obecna chwila";
+                TempData["Alert"] = "Data lub godzina rozpoczęcia jest wcześniejsza niż obecna chwila";
                 return RedirectToAction("PrepareToAddIT", new { id = it.FootballerId });
             }
 

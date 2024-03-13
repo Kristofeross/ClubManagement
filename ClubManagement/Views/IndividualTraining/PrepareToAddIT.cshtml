@@ -7,7 +7,7 @@
 </style>
 
 <div>
-
+    <p>Dodaj indywidualny trening</p>
     <p><a asp-controller="IndividualTraining" asp-action="ShowIT" asp-route-id="@ViewBag.FootballerId">Powrót</a></p>
 </div>
 @if (TempData["Alert"] != null)
@@ -27,6 +27,10 @@
         <input type="text" asp-for="Description" />
     </div>
     <div class="fields">
+        <label asp-for="Place">Miejsce</label>
+        <input type="text" asp-for="Place" />
+    </div>
+    <div class="fields">
         <label asp-for="DateOfTraining">Data treningu</label>
         <input type="date" asp-for="DateOfTraining" />
     </div>
@@ -37,10 +41,6 @@
     <div class="fields">
         <label asp-for="EndTraining">Godzina zakończenia</label>
         <input type="time" asp-for="EndTraining" />
-    </div>
-    <div class="fields">
-        <label asp-for="Place">Miejsce</label>
-        <input type="text" asp-for="Place" />
     </div>
     <button type="submit">
         Dodaj Trening

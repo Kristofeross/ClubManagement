@@ -6,10 +6,10 @@ namespace ClubManagement.Models
     public class Footballer
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string AgeCategory { get; set; } = String.Empty;
         public string? Country { get; set; } = string.Empty;
         //[Display(Name = "Wiek")] // Do wyświetlenia innej nazwy
         public int? Age { get; set; }

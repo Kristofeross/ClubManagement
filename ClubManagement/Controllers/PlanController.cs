@@ -24,16 +24,11 @@ namespace ClubManagement.Controllers
 
             if (user.Role == "Player")
             {
-                int a = (int)user.FootballerId;
                 return RedirectToAction("ShowPlanPlayer", new { id = user.FootballerId });
             }
             else if (user.Role == "Coach")
             {
-                var coach = _context.Coaches.FirstOrDefault(c => c.AccountId == user.Id);
-                if (coach == null)
-                    return NotFound();
-
-                return View(coach); 
+                return View(); 
             }
             else
                 return NotFound();

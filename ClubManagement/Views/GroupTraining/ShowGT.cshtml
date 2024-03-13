@@ -1,0 +1,33 @@
+﻿@model IEnumerable<GroupTraining>
+
+<div>
+    <div>
+        <h1>Lista treningów grupowych</h1>
+        <p><a asp-controller="home" asp-action="index" >Powrót</a></p>
+        <p><a asp-controller="GroupTraining" asp-action="PrepareToAddGT">Dodaj trening grupowy</a></p>
+        <p><a asp-controller="GroupTraining" asp-action="RemoveAllGT">Usuń wszystko</a></p>
+    </div>
+    <div>
+        @foreach (var obj in Model)
+        {
+            <div>
+                @obj.DateOfTraining.ToString("dd-MM-yyyy")
+                @obj.StartTraining.ToString("HH:mm") - @obj.EndTraining.ToString("HH:mm")
+                | @obj.Title | Szczegóły |
+                <a asp-controller="GroupTraining" asp-action="PrepareToEditGT" asp-route-id="@obj.Id">Edytuj</a> |
+                <a asp-controller="GroupTraining" asp-action="RemoveGT" asp-route-id="@obj.Id">Usuń</a>
+                <div>
+                    @{
+                        TimeSpan czas = obj.TimeOfTraining;
+                        int godziny = czas.Hours;
+                        int minuty = czas.Minutes;
+                    }
+                    <div>Typ treningu: @obj.Type</div>
+                    <div>Przewidywany czas: @godziny godz. @minuty min.</div>
+                    <div>Opis: @(obj.Description == null ? "Brak" : obj.Description)</div>
+                    <div>Miejsce: @(obj.Place == null ? "Brak" : obj.Place)</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

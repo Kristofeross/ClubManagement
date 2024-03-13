@@ -33,12 +33,15 @@ namespace ClubManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AgeCategory = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AgeCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    TimeOfTraining = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,14 +110,15 @@ namespace ClubManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Growth = table.Column<float>(type: "real", nullable: false),
-                    Weight = table.Column<float>(type: "real", nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlayerNumber = table.Column<int>(type: "int", nullable: false),
-                    WhichFoot = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AgeCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Age = table.Column<int>(type: "int", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Growth = table.Column<float>(type: "real", nullable: true),
+                    Weight = table.Column<float>(type: "real", nullable: true),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PlayerNumber = table.Column<int>(type: "int", nullable: true),
+                    WhichFoot = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -182,11 +186,14 @@ namespace ClubManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeOfTraining = table.Column<TimeSpan>(type: "time", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Place = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FootballerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
