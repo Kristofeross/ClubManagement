@@ -11,8 +11,7 @@ namespace ClubManagement.Models
         public string LastName { get; set; } = string.Empty;
         public string AgeCategory { get; set; } = String.Empty;
         public string? Country { get; set; } = string.Empty;
-        //[Display(Name = "Wiek")] // Do wyświetlenia innej nazwy
-        public int? Age { get; set; }
+        //[Display(Name = "Wiek")]
         public DateTime? DateOfBirth { get; set; }
         public float? Growth { get; set; }
         public float? Weight { get; set; }

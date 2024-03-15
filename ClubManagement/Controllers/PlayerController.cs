@@ -2,6 +2,7 @@
 using ClubManagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClubManagement.Controllers
@@ -39,6 +40,43 @@ namespace ClubManagement.Controllers
         [Authorize(Policy = "AdminAccess")]
         public IActionResult AddPlayer([FromForm]Footballer footballer)
         {
+            // walidacja do roku urodzenia oraz kategorii wiekowej
+            DateTime now = DateTime.Now;
+            int playerAge = now.Year - footballer.DateOfBirth.Value.Year;
+            DateTime givenData = footballer.DateOfBirth.Value.AddYears(playerAge);
+            if ( givenData < now )
+                playerAge--;// potrzebne aby mieć rzeczywisty wiek a nie kalendarzowy
+
+            switch (footballer.AgeCategory)
+            {
+                case "firstTeam":
+                case "reserves":
+                    if(playerAge < 18)
+                    {
+                        TempData["Alert"] = "Do pierwszej drużyny i rezerw zawodnik musi mieć minimum 18 lat";
+                        return RedirectToAction("AddPlayer", new { accountId = footballer.AccountId });
+                    }
+                    break;
+                case "juniors":
+                    if(playerAge < 13 || playerAge >= 18)
+                    {
+                        TempData["Alert"] = "Do drużyny juniorów zawodnik nie może mieć mniej 13 i więcej niż 18 lat";
+                        return RedirectToAction("AddPlayer", new { accountId = footballer.AccountId });
+                    }
+                    break;
+                case "sneakers":
+                    if (playerAge < 10 || playerAge >= 15)
+                    {
+                        TempData["Alert"] = "Do drużyny trampkarzy zawodnik nie może mieć mniej 10 i więcej niż 15 lat";
+                        return RedirectToAction("AddPlayer", new { accountId = footballer.AccountId });
+                    }
+                    break;
+                default:
+                    TempData["Alert"] = "Podany wiek zawodnika nie mieści się w żadną kategorię";
+                    return RedirectToAction("AddPlayer", new { accountId = footballer.AccountId });
+            }
+
+            // walidacja do numeru gracza
             var sameNumber = _context.Footballers.Any(f => f.PlayerNumber == footballer.PlayerNumber);
             if (sameNumber)
             {

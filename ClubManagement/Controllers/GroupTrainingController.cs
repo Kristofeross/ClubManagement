@@ -15,18 +15,41 @@ namespace ClubManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult ShowGT()
+        public IActionResult ShowGT(string filterCategory = "all"/*, string filterPosition = "all"*/)
         {
-            IEnumerable<GroupTraining> gt = _context.GroupTraining;
+            // Do poprawnego zaznaczenia co jest
+            ViewBag.FilterCategory = filterCategory;
+            //ViewBag.FilterPosition = filterPosition;
+
+            if (filterCategory != "all")
+            {
+                IEnumerable<GroupTraining> gtFilter = _context.GroupTraining.Where(gt => gt.AgeCategory == filterCategory).OrderBy(gt => gt.DateOfTraining).ToList();
+                return View(gtFilter);
+            }
+
+            IEnumerable<GroupTraining> gt = _context.GroupTraining.OrderBy(gt => gt.DateOfTraining);
 
             return View(gt);
+
         }
 
         // Dodawanie
         [HttpGet]
-        public IActionResult PrepareToAddGT()
+        public IActionResult PrepareToAddGT(string? filterCategory)
         {
-            ViewBag.Footballers = _context.Footballers.ToList();
+            if (filterCategory == null)
+                return NotFound("PrepareToAddGT - brak przekazanej kategorii");
+
+            //IEnumerable<Footballer> players;
+            IQueryable<Footballer> players;
+
+            if (filterCategory != "all")
+                players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
+            else
+                players = _context.Footballers;
+
+            ViewBag.Footballers = players;
+            ViewBag.FilterCategory = filterCategory;
 
             return View();
         }
@@ -69,22 +92,25 @@ namespace ClubManagement.Controllers
             _context.SaveChanges();
             TempData["Success"] = "Pomyslnie dodano trening";
 
-            return RedirectToAction("ShowGT");
+            return RedirectToAction("ShowGT", new { filterCategory = gt.AgeCategory });
         }
 
         // Edytowanie
         [HttpGet]
-        public IActionResult PrepareToEditGT(int? id)
+        public IActionResult PrepareToEditGT(int? id, string? filterCategory)
         {
             if (id == null || id == 0)
                 return NotFound("PrepareToEditGT - nie ma id ");
+            if (filterCategory == null)
+                return NotFound("PrepareToEditGT - nie ma filterCategory");
 
             var obj = _context.GroupTraining.Include(gt => gt.Footballers).FirstOrDefault(x => x.Id == id);
 
             if (obj == null)
                 return NotFound("PrepareToEditGT - nie ma obj w bazie danych");
 
-            ViewBag.Footballers = _context.Footballers.ToList();
+            ViewBag.FilterCategory = filterCategory;
+            ViewBag.Footballers = _context.Footballers.Where(f => f.AgeCategory == filterCategory).ToList();
             ViewBag.SelectedPlayers = obj.Footballers.Select(f => f.Id).ToList();
 
             return View(obj);
@@ -120,7 +146,7 @@ namespace ClubManagement.Controllers
                 .FirstOrDefault(x => x.Id == gt.Id);
 
             if (existingGT == null)
-                return NotFound("EditGT - Nie znaleziono obiektu");
+                return NotFound("EditGT - Nie znaleziono obiektu existingGT");
 
             // Usuń istniejące powiązania z piłkarzami
             existingGT.Footballers.Clear();
@@ -138,7 +164,7 @@ namespace ClubManagement.Controllers
             _context.SaveChanges();
             TempData["Success"] = "Pomyslnie zedytowano trening trening";
 
-            return RedirectToAction("ShowGT");
+            return RedirectToAction("ShowGT", new { filterCategory = gt.AgeCategory });
         }
 
         // Usuń

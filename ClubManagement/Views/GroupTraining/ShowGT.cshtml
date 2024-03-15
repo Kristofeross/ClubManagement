@@ -1,10 +1,35 @@
 ﻿@model IEnumerable<GroupTraining>
 
 <div>
+    <form method="get" asp-action="ShowGT">
+        <div>
+            <div>
+                <label>Kategoria wiekowa</label>
+                <select name="filterCategory">
+                    <option value="firstTeam" selected="@(ViewBag.FilterCategory == "firstTeam" ? true : false)">Seniorzy</option>
+                    <option value="reserves" selected="@(ViewBag.FilterCategory == "reserves" ? true : false)">Rezerwy</option>
+                    <option value="juniors" selected="@(ViewBag.FilterCategory == "juniors" ? true : false)">Juniorzy</option>
+                    <option value="sneakers" selected="@(ViewBag.FilterCategory == "sneakers" ? true : false)">Trampkarze</option>
+                    <option value="all" selected="@(ViewBag.FilterCategory == "all" ? true : false)">Wszystkie</option>
+                </select>
+            </div>
+            @* <div>
+                <label>Pozycja</label>
+                <select name="filterPosition">
+                    <option value="Seniorzy" selected="@(ViewBag.FilterPosition == "Seniorzy" ? true : false)">Seniorzy</option>
+                    <option value="Rezerwy" selected="@(ViewBag.FilterPosition == "Rezerwy" ? true : false)">Rezerwy</option>
+                    <option value="Juniorzy" selected="@(ViewBag.FilterPosition == "Juniorzy" ? true : false)">Juniorzy</option>
+                    <option value="Trampkarze" selected="@(ViewBag.FilterPosition == "Trampkarze" ? true : false)">Trampkarze</option>
+                    <option value="all" selected="@(ViewBag.FilterPosition == "all" ? true : false)">Wszystkie</option>
+                </select>
+            </div> *@
+            <button type="submit">Filtruj</button>
+        </div>
+    </form>
     <div>
         <h1>Lista treningów grupowych</h1>
         <p><a asp-controller="home" asp-action="index" >Powrót</a></p>
-        <p><a asp-controller="GroupTraining" asp-action="PrepareToAddGT">Dodaj trening grupowy</a></p>
+        <p><a asp-controller="GroupTraining" asp-action="PrepareToAddGT" asp-route-filterCategory="@ViewBag.FilterCategory">Dodaj trening grupowy</a></p>
         <p><a asp-controller="GroupTraining" asp-action="RemoveAllGT">Usuń wszystko</a></p>
     </div>
     <div>
@@ -14,7 +39,7 @@
                 @obj.DateOfTraining.ToString("dd-MM-yyyy")
                 @obj.StartTraining.ToString("HH:mm") - @obj.EndTraining.ToString("HH:mm")
                 | @obj.Title | Szczegóły |
-                <a asp-controller="GroupTraining" asp-action="PrepareToEditGT" asp-route-id="@obj.Id">Edytuj</a> |
+                <a asp-controller="GroupTraining" asp-action="PrepareToEditGT" asp-route-id="@obj.Id" asp-route-filterCategory="@ViewBag.FilterCategory">Edytuj</a> |
                 <a asp-controller="GroupTraining" asp-action="RemoveGT" asp-route-id="@obj.Id">Usuń</a>
                 <div>
                     @{

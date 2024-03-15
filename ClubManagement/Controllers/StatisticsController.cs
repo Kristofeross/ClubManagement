@@ -96,8 +96,6 @@ namespace ClubManagement.Controllers
             else
                 editedData.RedCards += statistics.RedCards;
 
-
-            //_context.Statistics.Update(statistics);
             _context.SaveChanges();
             return RedirectToAction("ShowStatistics");
         }

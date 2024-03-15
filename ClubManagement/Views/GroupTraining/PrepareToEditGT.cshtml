@@ -50,12 +50,20 @@
             <input type="time" asp-for="EndTraining" />
         </div>
         <div>
+            @{
+                string ageCategoryName;
+                if (ViewBag.FilterCategory == "firstTeam")
+                    ageCategoryName = "Seniorzy";
+                else if (ViewBag.FilterCategory == "reserves")
+                    ageCategoryName = "Rezerwy";
+                else if (ViewBag.FilterCategory == "juniors")
+                    ageCategoryName = "Juniorzy";
+                else
+                    ageCategoryName = "Trampkarze";
+            }
             <label asp-for="AgeCategory">Kategoria wiekowa:</label>
             <select asp-for="AgeCategory">
-                <option value="Seniorzy" selected>Seniorzy</option>
-                <option value="Rezerwy">Rezerwy</option>
-                <option value="Juniorzy">Juniorzy</option>
-                <option value="Trampkarze">Trampkarze</option>
+                <option value="@ViewBag.FilterCategory" >@ageCategoryName</option>
             </select>
         </div>
 

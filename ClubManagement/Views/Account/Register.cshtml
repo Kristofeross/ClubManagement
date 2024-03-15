@@ -7,10 +7,6 @@
 }
 <p>Register</p>
 <form method="post" asp-action="AddAccount">
-    @* <div>
-        <label>Mail:</label>
-        <input type="email" name="Email" required />
-    </div> *@
     <div>
         <label asp-for="AccountName">AccountName:</label>
         <input type="text" asp-for="AccountName" required />
@@ -22,12 +18,12 @@
     <div>
         <label asp-for="Role">Rola:</label>
         <select asp-for="Role">
-            <option value="Player">Player</option>
-            <option value="Coach">Coach</option>
-            <option value="Admin">Admin</option>
+            <option value="Player">Piłkarz</option>
+            <option value="Coach">Trener</option>
+            <option value="Admin">Administrator</option>
         </select>
     </div>
     <div>
-        <button type="submit">Register</button>
+        <button type="submit">Rejestracja</button>
     </div>
 </form>
