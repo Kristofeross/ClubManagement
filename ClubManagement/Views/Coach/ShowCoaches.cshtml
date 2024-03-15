@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Coach>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<div>
+    <h1>Lista trenerów</h1>
+    <p><a asp-controller="home" asp-action="index">Powrót</a></p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success ">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Alert"]
+    </div>
+}
+<div>
+    @foreach (var obj in @Model)
+    {
+        // Obliczanie wieku na podstawie daty urodzenia
+        var age = DateTime.Today.Year - obj.DateOfBirth.Year;
+        if (obj.DateOfBirth.Date > DateTime.Today.AddYears(-age))
+            age--;
+
+        <div>
+            <p>@obj.Name @obj.LastName | @obj.DateOfBirth.ToString("dd-MM-yyyy") | Wiek: @age | @obj.Country | @obj.KindOfCoach</p>
+            <p>
+                <a class="text-dark" asp-controller="Coach" asp-action="PrepareToEditCoach" asp-route-id="@obj.Id">Edytuj trenera</a>
+                <a class="text-dark" asp-controller="Coach" asp-action="RemoveCoach" asp-route-id="@obj.Id">Usuń trenera</a>
+            </p>
+        </div>
+    }
+</div>
+<div>
+    <a class="nav-link text-dark" asp-controller="Coach" asp-action="PrepareToAddCoach">Dodaj trenera</a>
+</div>

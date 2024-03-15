@@ -65,18 +65,17 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Age")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("KindOfCoach")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -89,7 +88,8 @@ namespace ClubManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[AccountId] IS NOT NULL");
 
                     b.ToTable("Coaches");
                 });
@@ -200,6 +200,9 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateOfTraining")
                         .HasColumnType("datetime2");
 
@@ -230,6 +233,8 @@ namespace ClubManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoachId");
 
                     b.HasIndex("FootballerId");
 
@@ -321,6 +326,36 @@ namespace ClubManagement.Migrations
                     b.ToTable("Transfers");
                 });
 
+            modelBuilder.Entity("CoachGroupTraining", b =>
+                {
+                    b.Property<int>("CoachesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupTrainingsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoachesId", "GroupTrainingsId");
+
+                    b.HasIndex("GroupTrainingsId");
+
+                    b.ToTable("CoachGroupTraining", (string)null);
+                });
+
+            modelBuilder.Entity("CoachMatch", b =>
+                {
+                    b.Property<int>("CoachesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoachesId", "MatchesId");
+
+                    b.HasIndex("MatchesId");
+
+                    b.ToTable("CoachMatch", (string)null);
+                });
+
             modelBuilder.Entity("FootballerGroupTraining", b =>
                 {
                     b.Property<int>("FootballersId")
@@ -356,8 +391,7 @@ namespace ClubManagement.Migrations
                     b.HasOne("ClubManagement.Models.Account", "Account")
                         .WithOne("Coach")
                         .HasForeignKey("ClubManagement.Models.Coach", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Account");
                 });
@@ -374,11 +408,19 @@ namespace ClubManagement.Migrations
 
             modelBuilder.Entity("ClubManagement.Models.IndividualTraining", b =>
                 {
+                    b.HasOne("ClubManagement.Models.Coach", "Coach")
+                        .WithMany("IndividualTrainings")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClubManagement.Models.Footballer", "Footballer")
                         .WithMany("IndividualTrainings")
                         .HasForeignKey("FootballerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Coach");
 
                     b.Navigation("Footballer");
                 });
@@ -392,6 +434,36 @@ namespace ClubManagement.Migrations
                         .IsRequired();
 
                     b.Navigation("Footballer");
+                });
+
+            modelBuilder.Entity("CoachGroupTraining", b =>
+                {
+                    b.HasOne("ClubManagement.Models.Coach", null)
+                        .WithMany()
+                        .HasForeignKey("CoachesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClubManagement.Models.GroupTraining", null)
+                        .WithMany()
+                        .HasForeignKey("GroupTrainingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CoachMatch", b =>
+                {
+                    b.HasOne("ClubManagement.Models.Coach", null)
+                        .WithMany()
+                        .HasForeignKey("CoachesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClubManagement.Models.Match", null)
+                        .WithMany()
+                        .HasForeignKey("MatchesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FootballerGroupTraining", b =>
@@ -429,6 +501,11 @@ namespace ClubManagement.Migrations
                     b.Navigation("Coach");
 
                     b.Navigation("Footballer");
+                });
+
+            modelBuilder.Entity("ClubManagement.Models.Coach", b =>
+                {
+                    b.Navigation("IndividualTrainings");
                 });
 
             modelBuilder.Entity("ClubManagement.Models.Footballer", b =>

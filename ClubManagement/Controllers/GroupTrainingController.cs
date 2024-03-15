@@ -15,11 +15,9 @@ namespace ClubManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult ShowGT(string filterCategory = "all"/*, string filterPosition = "all"*/)
+        public IActionResult ShowGT(string filterCategory = "all")
         {
-            // Do poprawnego zaznaczenia co jest
             ViewBag.FilterCategory = filterCategory;
-            //ViewBag.FilterPosition = filterPosition;
 
             if (filterCategory != "all")
             {

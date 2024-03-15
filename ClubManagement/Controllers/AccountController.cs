@@ -64,7 +64,7 @@ namespace ClubManagement.Controllers
                 if (model.Role == "Player")
                     return RedirectToAction("AddPlayer", "Player", new { accountId = account.Id });
                 else if (model.Role == "Coach")
-                    return RedirectToAction("AddCoach", "Coach");
+                    return RedirectToAction("PrepareToAddCoach", "Coach", new { accountId = account.Id });
                 else
                     return RedirectToAction("Index", "Home");
             }

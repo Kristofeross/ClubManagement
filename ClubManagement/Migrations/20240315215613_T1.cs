@@ -84,12 +84,12 @@ namespace ClubManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: false)
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KindOfCoach = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,7 +99,7 @@ namespace ClubManagement.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +112,6 @@ namespace ClubManagement.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AgeCategory = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Age = table.Column<int>(type: "int", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Growth = table.Column<float>(type: "real", nullable: true),
                     Weight = table.Column<float>(type: "real", nullable: true),
@@ -130,6 +129,54 @@ namespace ClubManagement.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoachGroupTraining",
+                columns: table => new
+                {
+                    CoachesId = table.Column<int>(type: "int", nullable: false),
+                    GroupTrainingsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoachGroupTraining", x => new { x.CoachesId, x.GroupTrainingsId });
+                    table.ForeignKey(
+                        name: "FK_CoachGroupTraining_Coaches_CoachesId",
+                        column: x => x.CoachesId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CoachGroupTraining_GroupTraining_GroupTrainingsId",
+                        column: x => x.GroupTrainingsId,
+                        principalTable: "GroupTraining",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CoachMatch",
+                columns: table => new
+                {
+                    CoachesId = table.Column<int>(type: "int", nullable: false),
+                    MatchesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoachMatch", x => new { x.CoachesId, x.MatchesId });
+                    table.ForeignKey(
+                        name: "FK_CoachMatch_Coaches_CoachesId",
+                        column: x => x.CoachesId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CoachMatch_Matches_MatchesId",
+                        column: x => x.MatchesId,
+                        principalTable: "Matches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,6 +233,8 @@ namespace ClubManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    FootballerId = table.Column<int>(type: "int", nullable: false),
+                    CoachId = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTraining = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -193,12 +242,17 @@ namespace ClubManagement.Migrations
                     TimeOfTraining = table.Column<TimeSpan>(type: "time", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Place = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FootballerId = table.Column<int>(type: "int", nullable: false)
+                    Place = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IndividualTraining", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IndividualTraining_Coaches_CoachId",
+                        column: x => x.CoachId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_IndividualTraining_Footballers_FootballerId",
                         column: x => x.FootballerId,
@@ -236,7 +290,18 @@ namespace ClubManagement.Migrations
                 name: "IX_Coaches_AccountId",
                 table: "Coaches",
                 column: "AccountId",
-                unique: true);
+                unique: true,
+                filter: "[AccountId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoachGroupTraining_GroupTrainingsId",
+                table: "CoachGroupTraining",
+                column: "GroupTrainingsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoachMatch_MatchesId",
+                table: "CoachMatch",
+                column: "MatchesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FootballerGroupTraining_GroupTrainingsId",
@@ -256,6 +321,11 @@ namespace ClubManagement.Migrations
                 filter: "[AccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IndividualTraining_CoachId",
+                table: "IndividualTraining",
+                column: "CoachId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IndividualTraining_FootballerId",
                 table: "IndividualTraining",
                 column: "FootballerId");
@@ -270,7 +340,10 @@ namespace ClubManagement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Coaches");
+                name: "CoachGroupTraining");
+
+            migrationBuilder.DropTable(
+                name: "CoachMatch");
 
             migrationBuilder.DropTable(
                 name: "FootballerGroupTraining");
@@ -292,6 +365,9 @@ namespace ClubManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "Matches");
+
+            migrationBuilder.DropTable(
+                name: "Coaches");
 
             migrationBuilder.DropTable(
                 name: "Footballers");

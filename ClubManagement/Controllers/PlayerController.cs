@@ -15,8 +15,9 @@ namespace ClubManagement.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult ShowPlayers()
         {
+            // Do zmiany zrób potem samych playerów bez statystyk chyba że trzeba będzie
             IEnumerable<Footballer> footballers = _context.Footballers
                 .Include(f => f.Statistics)
                 .ToList();
@@ -31,9 +32,10 @@ namespace ClubManagement.Controllers
         {
             if (accountId == null)
                 return RedirectToAction("register", "Account");
-            else
-                ViewBag.AccountId = accountId;
-                return View();
+            
+
+            ViewBag.AccountId = accountId;
+            return View();
         }
 
         [HttpPost]
@@ -43,8 +45,8 @@ namespace ClubManagement.Controllers
             // walidacja do roku urodzenia oraz kategorii wiekowej
             DateTime now = DateTime.Now;
             int playerAge = now.Year - footballer.DateOfBirth.Value.Year;
-            DateTime givenData = footballer.DateOfBirth.Value.AddYears(playerAge);
-            if ( givenData < now )
+            DateTime givenDate = footballer.DateOfBirth.Value.AddYears(playerAge);
+            if ( givenDate < now )
                 playerAge--;// potrzebne aby mieć rzeczywisty wiek a nie kalendarzowy
 
             switch (footballer.AgeCategory)
@@ -101,7 +103,7 @@ namespace ClubManagement.Controllers
                 _context.Accounts.Update(accountId);
                 _context.SaveChanges();
 
-                return RedirectToAction("Index", "Player");
+                return RedirectToAction("ShowPlayers", "Player");
             }
         }
 
@@ -125,6 +127,35 @@ namespace ClubManagement.Controllers
         [Authorize(Policy = "AdminAccess")]
         public IActionResult EditPlayer([FromForm]Footballer footballer)
         {
+            // walidacja do roku urodzenia oraz kategorii wiekowej
+            DateTime now = DateTime.Now;
+            int playerAge = now.Year - footballer.DateOfBirth.Value.Year;
+            DateTime givenDate = footballer.DateOfBirth.Value.AddYears(playerAge);
+            if (givenDate < now)
+                playerAge--;// potrzebne aby mieć rzeczywisty wiek a nie kalendarzowy
+
+            switch (footballer.AgeCategory)
+            {
+                case "firstTeam":
+                case "reserves":
+                    if (playerAge < 18)
+                    {
+                        TempData["Alert"] = "Do pierwszej drużyny i rezerw zawodnik musi mieć minimum 18 lat";
+                        return RedirectToAction("AddPlayer", new { id = footballer.Id });
+                    }
+                    break;
+                case "juniors":
+                    if (playerAge < 13 || playerAge >= 18)
+                    {
+                        TempData["Alert"] = "Do drużyny juniorów zawodnik nie może mieć mniej 13 i więcej niż 18 lat";
+                        return RedirectToAction("AddPlayer", new { id = footballer.Id });
+                    }
+                    break;
+                default:
+                    TempData["Alert"] = "Podany wiek zawodnika nie mieści się w żadną kategorię";
+                    return RedirectToAction("AddPlayer", new { id = footballer.Id });
+            }
+
             var footballerToEdit = _context.Footballers.FirstOrDefault(x => x.Id == footballer.Id);
             if (footballerToEdit == null)
                 return NotFound();
@@ -150,7 +181,7 @@ namespace ClubManagement.Controllers
             //_context.Footballers.Update(footballerToEdit);
             _context.SaveChanges();
             TempData["Success"] = "Pomyślnie zaktualizowano gracza";
-            return RedirectToAction("Index");
+            return RedirectToAction("ShowPlayers");
         }
 
         // Remove Player
@@ -159,10 +190,11 @@ namespace ClubManagement.Controllers
         public IActionResult RemovePlayer(int id)
         {
             var footballerToRemove = _context.Footballers.Include(f => f.Statistics).FirstOrDefault(f => f.Id == id);
-            if (footballerToRemove != null)
-                _context.Footballers.Remove(footballerToRemove);
-            else
-                return RedirectToAction("Index");
+            if (footballerToRemove == null)
+                return RedirectToAction("ShowPlayers");
+               
+
+            _context.Footballers.Remove(footballerToRemove);
 
             var accountToRemove = _context.Accounts.FirstOrDefault(a => a.Id == footballerToRemove.AccountId);
             if (accountToRemove != null)
@@ -170,7 +202,7 @@ namespace ClubManagement.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ShowPlayers");
         }
     }
 }

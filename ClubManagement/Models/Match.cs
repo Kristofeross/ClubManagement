@@ -6,7 +6,6 @@ namespace ClubManagement.Models
     public class Match
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime Date {  get; set; }
         public DateTime Time { get; set; }
@@ -16,5 +15,7 @@ namespace ClubManagement.Models
         public bool IsCancelledOrPostponed { get; set; }
         // Footballer *-* Match
         public ICollection<Footballer> Footballers { get; set; } = new List<Footballer>();
+        // Coach *-* Match
+        public ICollection<Coach> Coaches { get; set; } = new List<Coach>();
     }
 }

@@ -7,6 +7,8 @@ namespace ClubManagement.Models
     {
         [Key]
         public int Id { get; set; }
+        public int FootballerId { get; set; }
+        public int CoachId { get; set; }
         public string Type { get; set; } = "Indywidualny";
         public DateTime DateOfTraining { get; set; }
         public DateTime StartTraining { get; set; }
@@ -17,8 +19,9 @@ namespace ClubManagement.Models
         public string? Place {  get; set; }
         //public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
 
-        // Footballer 1-* IndividualTraining
-        public int FootballerId { get; set; }
+        // Footballer 1-* IndividualTraining 
         public Footballer Footballer { get; set; }
+        // Coach 1-* IndividualTraining 
+        public Coach Coach { get; set; }
     }
 }

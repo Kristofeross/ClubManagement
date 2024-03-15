@@ -25,13 +25,14 @@ namespace ClubManagement.ApplicationDbContext
                 .HasOne(a => a.Footballer)
                 .WithOne(f => f.Account)
                 .HasForeignKey<Footballer>(f => f.AccountId)
-                .OnDelete(DeleteBehavior.SetNull); // Ustawia wartość AccountId na null po usunięciu konta
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Account 1-1 Coach
             modelBuilder.Entity<Account>()
                 .HasOne(a => a.Coach)
                 .WithOne(c => c.Account)
-                .HasForeignKey<Coach>(c => c.AccountId);
+                .HasForeignKey<Coach>(c => c.AccountId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             /*Encje do piłkarzy*/
 
@@ -64,7 +65,26 @@ namespace ClubManagement.ApplicationDbContext
                 .HasMany(m => m.Footballers)
                 .WithMany(f => f.Matches)
                 .UsingEntity(m => m.ToTable("FootballerMatch"));
-                
+
+            /*Encje do trenerów*/
+
+            // Coach 1-* IndividualTraining
+            modelBuilder.Entity<IndividualTraining>()
+                .HasOne(it => it.Coach)
+                .WithMany(c => c.IndividualTrainings)
+                .HasForeignKey(it => it.CoachId);
+
+            // Footballer *-* GroupTraining  
+            modelBuilder.Entity<GroupTraining>()
+                .HasMany(gt => gt.Coaches)
+                .WithMany(c => c.GroupTrainings)
+                .UsingEntity(gt => gt.ToTable("CoachGroupTraining"));
+
+            // Footballer *-* Match
+            modelBuilder.Entity<Match>()
+                .HasMany(m => m.Coaches)
+                .WithMany(c => c.Matches)
+                .UsingEntity(m => m.ToTable("CoachMatch"));
         }
     }
 }

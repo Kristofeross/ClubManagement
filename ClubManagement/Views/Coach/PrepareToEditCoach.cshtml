@@ -1,0 +1,52 @@
+﻿@model Coach
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+<div>
+    <h1>Edycja trenera</h1>
+    <p><a asp-controller="coach" asp-action="showCoaches">Powrót</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<form method="post" asp-action="EditCoach">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="AccountId" />
+
+    <div class="fields">
+        <label asp-for="Name">Imię</label>
+        <input type="text" asp-for="Name" />
+    </div>
+    <div class="fields">
+        <label asp-for="LastName">Nazwisko</label>
+        <input type="text" asp-for="LastName" />
+    </div>
+    <div class="fields">
+        <label asp-for="Country">Kraj</label>
+        <input type="text" asp-for="Country" />
+    </div>
+    <div class="fields">
+        <label asp-for="KindOfCoach">Rodzaj trenera</label>
+        <select asp-for="KindOfCoach">
+            <option value="headCoachFirstTeam">Trener główny pierwszej drużyny</option>
+            <option value="headCoachReserves">Trener główny rezerw</option>
+            <option value="headCoachJuniors">Trener główny juniorów</option>
+            <option value="goalkeepersCoach">Trener bramkarzy</option>
+            <option value="assistantCoach">Asystent trenera</option>
+            <option value="technicalCoach">Trener techniczny</option>
+            <option value="physicalCoach">Trener fizyczny</option>
+            <option value="tacticalCoach">Trener taktyczny</option>
+        </select>
+    </div>
+    <div class="fields">
+        <label asp-for="DateOfBirth">Data urodzenia</label>
+        <input type="date" asp-for="DateOfBirth" />
+    </div>
+
+    <button type="submit">Edytuj Trenera</button>
+</form>

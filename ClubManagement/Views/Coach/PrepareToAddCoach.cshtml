@@ -1,0 +1,55 @@
+﻿@model Coach;
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<div>
+    <h1>Dodanie nowego trenera</h1>
+    <p><a asp-controller="Coach" asp-action="ShowCoaches">Powrót</a></p>
+</div>
+<form method="post" asp-action="AddCoach">
+    <input type="hidden" asp-for="AccountId" value="@ViewBag.AccountId" />
+    <div class="fields">
+        <label asp-for="Name">Imię</label>
+        <input type="text" asp-for="Name" />
+    </div>
+    <div class="fields">
+        <label asp-for="LastName">Nazwisko</label>
+        <input type="text" asp-for="LastName" />
+    </div>
+    <div class="fields">
+        <label asp-for="Country">Kraj</label>
+        <input type="text" asp-for="Country" />
+    </div>
+    <div class="fields">
+        <label asp-for="KindOfCoach">Rodzaj trenera</label>
+        <select asp-for="KindOfCoach">
+            <option value="headCoachFirstTeam">Trener główny pierwszej drużyny</option>
+            <option value="headCoachReserves">Trener główny rezerw</option>
+            <option value="headCoachJuniors">Trener główny juniorów</option>
+            <option value="goalkeepersCoach">Trener bramkarzy</option>
+            <option value="assistantCoach">Asystent trenera</option>
+            <option value="technicalCoach">Trener techniczny</option>
+            <option value="physicalCoach">Trener fizyczny</option>
+            <option value="tacticalCoach">Trener taktyczny</option>
+@*             <option value="j">Trener indywidualny</option>
+            <option value="k">Trener ds. psychologii sportu</option> *@
+        </select>
+    </div>
+    <div class="fields">
+        <label asp-for="DateOfBirth">Data urodzenia</label>
+        <input type="date" asp-for="DateOfBirth" />
+    </div>
+    
+    <button type="submit">
+        Dodaj trenera
+    </button>
+</form>

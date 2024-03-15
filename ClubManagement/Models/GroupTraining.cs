@@ -19,5 +19,7 @@ namespace ClubManagement.Models
 
         // Footballer *-* GroupTraining
         public ICollection<Footballer> Footballers { get; set; } = new List<Footballer>();
+        // Coach *-* GroupTraining
+        public ICollection<Coach> Coaches { get; set; } = new List<Coach>();
     }
 }

@@ -24,7 +24,7 @@ namespace ClubManagement.Models
         public Account Account { get; set; }
         // Footballer 1-1 Statistics
         //public int? StatisticsId { get; set; } // Niepotrzebne do relacji rodzic dziecko
-        public Statistics Statistics { get; set; }//  = null!;
+        public Statistics Statistics { get; set; }
 
         // Footballer 1-* IndividualTraining
         public ICollection<IndividualTraining> IndividualTrainings { get; set; } = new List<IndividualTraining>();
