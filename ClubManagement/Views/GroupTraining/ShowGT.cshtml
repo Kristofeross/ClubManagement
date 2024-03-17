@@ -12,23 +12,21 @@
                     <option value="juniors" selected="@(ViewBag.FilterCategory == "juniors" ? true : false)">Juniorzy</option>
                 </select>
             </div>
-            @* <div>
-                <label>Pozycja</label>
-                <select name="filterPosition">
-                    <option value="Seniorzy" selected="@(ViewBag.FilterPosition == "Seniorzy" ? true : false)">Seniorzy</option>
-                    <option value="Rezerwy" selected="@(ViewBag.FilterPosition == "Rezerwy" ? true : false)">Rezerwy</option>
-                    <option value="Juniorzy" selected="@(ViewBag.FilterPosition == "Juniorzy" ? true : false)">Juniorzy</option>
-                    <option value="Trampkarze" selected="@(ViewBag.FilterPosition == "Trampkarze" ? true : false)">Trampkarze</option>
-                    <option value="all" selected="@(ViewBag.FilterPosition == "all" ? true : false)">Wszystkie</option>
-                </select>
-            </div> *@
+
             <button type="submit">Filtruj</button>
         </div>
     </form>
+    
     <div>
         <h1>Lista treningów grupowych</h1>
         <p><a asp-controller="home" asp-action="index" >Powrót</a></p>
-        <p><a asp-controller="GroupTraining" asp-action="PrepareToAddGT" asp-route-filterCategory="@ViewBag.FilterCategory">Dodaj trening grupowy</a></p>
+        <p>
+            <a asp-controller="GroupTraining" asp-action="PrepareToAddGT" 
+                asp-route-filterCategory="@ViewBag.FilterCategory" 
+            >
+                Dodaj trening grupowy
+            </a>
+        </p>
         <p><a asp-controller="GroupTraining" asp-action="RemoveAllGT">Usuń wszystko</a></p>
     </div>
     <div>

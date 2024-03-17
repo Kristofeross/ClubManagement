@@ -53,10 +53,10 @@
     <div class="fields">
         <label asp-for="Position">Pozycja</label>
         <select asp-for="Position">
-            <option>Bramkarz</option>
-            <option>Obrońca</option>
-            <option>Pomocnik</option>
-            <option>Napastnik</option>
+            <option value="goalkeeper">Bramkarz</option>
+            <option value="defender">Obrońca</option>
+            <option value="helper">Pomocnik</option>
+            <option value="attacker">Napastnik</option>
             @* <option>Lewy Obrońca</option>
             <option>Środkowy Obrońca</option>
             <option>Prawy Obrońca</option>
@@ -77,9 +77,9 @@
     <div class="fields">
         <label asp-for="WhichFoot">Dominująca noga</label>
         <select asp-for="WhichFoot">
-            <option>Prawa</option>
-            <option>Lewa</option>
-            <option>Obunożny</option>
+            <option value="right">Prawa</option>
+            <option value="left">Lewa</option>
+            <option value="both">Obunożny</option>
         </select>
     </div>
     <button type="submit">

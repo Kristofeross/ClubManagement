@@ -15,7 +15,28 @@
 
 <div>
     <h2>Dodaj trening grupowy</h2>
-    <p><a asp-controller="GroupTraining" asp-action="showGT" asp-route-filterCategory="@ViewBag.FilterCategory">Powrót</a></p>
+    <p>
+        <a asp-controller="GroupTraining" asp-action="showGT" asp-route-filterCategory="@ViewBag.FilterCategory">
+            Powrót
+        </a>
+    </p>
+</div>
+
+<div>
+    <form method="get" asp-action="PrepareToAddGT">
+        <label>Wybierz pozycje zawodników do dodania</label>
+        <select name="filterPosition">
+            <option value="all" selected="@(ViewBag.FilterPosition == "all" ? true : false)">Wszyscy</option>
+            <option value="goalkeeper" selected="@(ViewBag.FilterPosition == "goalkeeper" ? true : false)">Bramkarze</option>
+            <option value="defender" selected="@(ViewBag.FilterPosition == "defender" ? true : false)">Obrońcy</option>
+            <option value="helper" selected="@(ViewBag.FilterPosition == "helper" ? true : false)">Pomocnicy</option>
+            <option value="attacker" selected="@(ViewBag.FilterPosition == "attacker" ? true : false)">Napastnicy</option>
+        </select>
+
+        <input type="hidden" name="filterCategory" value="@ViewBag.FilterCategory" />
+
+        <button type="submit">Filtruj zawodników</button>
+    </form>
 </div>
 
 <div>
@@ -24,6 +45,7 @@
         <button type="submit">Dodaj trening grupowy</button>
 
         <input type="hidden" name="filterCategory" value="@ViewBag.FilterCategory" />
+        <input type="hidden" name="filterPosition" value="@ViewBag.FilterPosition" />
 
         <div class="fields">
             <label asp-for="Title">Tytuł</label>

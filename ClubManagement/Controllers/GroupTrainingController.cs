@@ -31,16 +31,23 @@ namespace ClubManagement.Controllers
         // Dodawanie
         [HttpGet]
         //[Authorize(Policy = "")]
-        public IActionResult PrepareToAddGT(string? filterCategory)
+        public IActionResult PrepareToAddGT(string? filterCategory, string? filterPosition = "all")
         {
             if (filterCategory == null)
                 return NotFound("PrepareToAddGT - brak przekazanej kategorii");
 
             //IEnumerable<Footballer> players;
-            IQueryable<Footballer> players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
+            IQueryable<Footballer> players; 
             IQueryable<Coach> coaches = _context.Coaches;
 
+            if(filterPosition != "all")
+                players = _context.Footballers.Where(f => f.AgeCategory == filterCategory 
+                    && f.Position == filterPosition);
+            else
+                players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
+
             ViewBag.FilterCategory = filterCategory;
+            ViewBag.FilterPosition = filterPosition;
             ViewBag.Footballers = players;
             ViewBag.Coaches = coaches;
 
@@ -48,7 +55,11 @@ namespace ClubManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddGT([FromForm]GroupTraining gt, [FromForm]List<int> selectedPlayers, [FromForm]List<int> selectedCoaches, [FromForm]string filterCategory)
+        public IActionResult AddGT([FromForm]GroupTraining gt, 
+            [FromForm]List<int> selectedPlayers, 
+            [FromForm]List<int> selectedCoaches, 
+            [FromForm]string filterCategory,
+            [FromForm]string filterPosition)
         {
             // Sprawdzenie czy podane data i czas nie są wcześniejsze niż chwila obecna
             DateTime now = DateTime.Now;
@@ -57,7 +68,7 @@ namespace ClubManagement.Controllers
                 (gt.DateOfTraining.Date == now.Date && gt.StartTraining.TimeOfDay < now.TimeOfDay))
             {
                 TempData["Alert"] = "Data lub godzina rozpoczęcia jest wcześniejsza niż obecna chwila";
-                return RedirectToAction("PrepareToAddGT", new { filterCategory = filterCategory });
+                return RedirectToAction("PrepareToAddGT", new { filterCategory = filterCategory, filterPosition = filterPosition });
             }
 
             gt.StartTraining = gt.DateOfTraining.Date + gt.StartTraining.TimeOfDay;
@@ -66,7 +77,7 @@ namespace ClubManagement.Controllers
             if (gt.EndTraining < gt.StartTraining)
             {
                 TempData["Alert"] = "Zakończenie treningu jest wcześniej niż rozpoczęcie";
-                return RedirectToAction("PrepareToAddGT", new { filterCategory = filterCategory });
+                return RedirectToAction("PrepareToAddGT", new { filterCategory = filterCategory, filterPosition = filterPosition });
             }
 
             gt.TimeOfTraining = gt.EndTraining - gt.StartTraining;
