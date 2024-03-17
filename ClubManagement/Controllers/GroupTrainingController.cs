@@ -40,12 +40,22 @@ namespace ClubManagement.Controllers
             IQueryable<Footballer> players; 
             IQueryable<Coach> coaches = _context.Coaches;
 
-            if(filterPosition != "all")
-                players = _context.Footballers.Where(f => f.AgeCategory == filterCategory 
-                    && f.Position == filterPosition);
+            if(filterCategory != "all")
+            {
+                if (filterPosition != "all")
+                    players = _context.Footballers.Where(f => f.AgeCategory == filterCategory
+                        && f.Position == filterPosition);
+                else
+                    players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
+            }
             else
-                players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
-
+            {
+                if (filterPosition != "all")
+                    players = _context.Footballers.Where(f => f.Position == filterPosition);
+                else
+                    players = _context.Footballers;
+            }
+            
             ViewBag.FilterCategory = filterCategory;
             ViewBag.FilterPosition = filterPosition;
             ViewBag.Footballers = players;
@@ -120,7 +130,12 @@ namespace ClubManagement.Controllers
                 .FirstOrDefault(x => x.Id == id);
 
             // do players
-            IQueryable<Footballer> players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
+            IQueryable<Footballer> players;
+
+            if (filterCategory != "all")
+                players = _context.Footballers.Where(f => f.AgeCategory == filterCategory);
+            else
+                players = _context.Footballers;
 
             if (obj == null)
                 return NotFound("PrepareToEditGT - nie ma obj w bazie danych");

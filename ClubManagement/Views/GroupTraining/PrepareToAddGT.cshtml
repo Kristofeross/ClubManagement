@@ -79,9 +79,10 @@
                     ageCategoryName = "Seniorzy";
                 else if (ViewBag.FilterCategory == "reserves")
                     ageCategoryName = "Rezerwy";
-                else
+                else if (ViewBag.FilterCategory == "juniors")
                     ageCategoryName = "Juniorzy";
-
+                else
+                    ageCategoryName = "Wszyscy";
             }
             <label asp-for="AgeCategory">Kategoria wiekowa:</label>
             <select asp-for="AgeCategory">

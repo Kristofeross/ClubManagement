@@ -56,7 +56,6 @@ namespace ClubManagement.Controllers
 
             var c = _context.Coaches
                 .Include(f => f.IndividualTrainings)
-                .ThenInclude(f => f.Coach)
                 .Include(f => f.GroupTrainings)
                 .ThenInclude(f => f.Footballers)
                 .FirstOrDefault(f => f.Id == id);

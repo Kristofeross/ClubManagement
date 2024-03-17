@@ -10,6 +10,7 @@
                     <option value="firstTeam" selected="@(ViewBag.FilterCategory == "firstTeam" ? true : false)">Seniorzy</option>
                     <option value="reserves" selected="@(ViewBag.FilterCategory == "reserves" ? true : false)">Rezerwy</option>
                     <option value="juniors" selected="@(ViewBag.FilterCategory == "juniors" ? true : false)">Juniorzy</option>
+                    <option value="all" selected="@(ViewBag.FilterCategory == "all" ? true : false)">Treningi dla wszystkich</option>
                 </select>
             </div>
 
@@ -21,9 +22,7 @@
         <h1>Lista treningów grupowych</h1>
         <p><a asp-controller="home" asp-action="index" >Powrót</a></p>
         <p>
-            <a asp-controller="GroupTraining" asp-action="PrepareToAddGT" 
-                asp-route-filterCategory="@ViewBag.FilterCategory" 
-            >
+            <a asp-controller="GroupTraining" asp-action="PrepareToAddGT" asp-route-filterCategory="@ViewBag.FilterCategory">
                 Dodaj trening grupowy
             </a>
         </p>
