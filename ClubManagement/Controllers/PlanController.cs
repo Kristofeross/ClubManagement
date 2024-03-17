@@ -28,7 +28,7 @@ namespace ClubManagement.Controllers
             }
             else if (user.Role == "Coach")
             {
-                return View(); 
+                return RedirectToAction("ShowPlanCoach", new { id = user.CoachId });
             }
             else
                 return NotFound();
@@ -42,16 +42,24 @@ namespace ClubManagement.Controllers
 
             var f = _context.Footballers
                 .Include(f => f.IndividualTrainings)
-                .Include(f => f.GroupTrainings)
+                .ThenInclude(f => f.Coach)
+                .Include(f => f.GroupTrainings)           
                 .FirstOrDefault(f => f.Id == id);
 
             return View(f);
         }
 
-        public IActionResult ShowPlanCoach(Coach c)
+        public IActionResult ShowPlanCoach(int? id)
         {
-            if (c == null)
-                return NotFound();
+            if (id == null || id == 0)
+                return NotFound("ShowPlanCoach brak id");
+
+            var c = _context.Coaches
+                .Include(f => f.IndividualTrainings)
+                .ThenInclude(f => f.Coach)
+                .Include(f => f.GroupTrainings)
+                .ThenInclude(f => f.Footballers)
+                .FirstOrDefault(f => f.Id == id);
 
             return View(c);
         }

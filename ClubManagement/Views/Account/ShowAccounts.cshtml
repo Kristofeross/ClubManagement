@@ -10,27 +10,35 @@
         @TempData["Alert"]
     </div>
 }
+
+<form method="get" asp-action="ShowAccounts">
+    <div>
+        <div>
+            <label>Po roli</label>
+            <select name="filterRole">
+                <option value="Player" selected="@(ViewBag.FilterRole == "Player" ? true : false)">Gracze</option>
+                <option value="Coach" selected="@(ViewBag.FilterRole == "Coach" ? true : false)">Trenerzy</option>
+                <option value="Admin" selected="@(ViewBag.FilterRole == "Admin" ? true : false)">Administratorzy</option>
+                <option value="all" selected="@(ViewBag.FilterRole == "all" ? true : false)">Wszystkie</option>
+            </select>
+        </div>
+        <button type="submit">Filtruj</button>
+    </div>
+</form>
+
 <table>
     <thead>
         <tr>     
-            <th>@Html.DisplayNameFor(n => n.Id)</th>
             <th>@Html.DisplayNameFor(n => n.AccountName)</th>
             <th>@Html.DisplayNameFor(n => n.Role)</th>
-            <th>@Html.DisplayNameFor(n => n.PasswordHash)</th>
-            <th>@Html.DisplayNameFor(n => n.Salt)</th>
-            @* <th>@Html.DisplayNameFor(n => n.FootballerId)</th> *@
         </tr>
     </thead>
     <tbody>
         @foreach (var obj in @Model)
         {
             <tr>
-                <td>@obj.Id</td>
                 <td>@obj.AccountName</td>
                 <td>@obj.Role</td>
-                <td>@obj.PasswordHash</td>
-                <td>@obj.Salt</td>
-                @* <td>@obj.FootballerId</td> *@
                 <td>
                     <a class="nav-link text-dark" asp-controller="Account" asp-action="EditAccount" asp-route-id="@obj.Id" asp-route-type="accountName">Edytuj nazwę konta</a>
                 </td>
@@ -38,7 +46,7 @@
                     <a class="nav-link text-dark" asp-controller="Account" asp-action="EditAccount" asp-route-id="@obj.Id" asp-route-type="password">Edytuj hasło</a>
                 </td>
                 <td>
-                    <a class="nav-link text-dark" asp-controller="Account" asp-action="RemoveAccount" asp-route-id="@obj.Id">Usuń konto</a>
+                    <a class="nav-link text-dark" asp-controller="Account" asp-action="RemoveAccount" asp-route-id="@obj.Id" asp-route-filterRole="@ViewBag.FilterRole">Usuń konto</a>
                 </td>
             </tr>
         }

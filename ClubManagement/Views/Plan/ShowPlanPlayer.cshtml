@@ -42,7 +42,8 @@
             Data: @individualTraining.DateOfTraining.ToShortDateString()<br />
             Godzina rozpoczęcia: @individualTraining.StartTraining.ToShortTimeString()<br />
             Godzina zakończenia: @individualTraining.EndTraining.ToShortTimeString()<br />
-            Opis: @individualTraining.Description
+            Opis: @individualTraining.Description<br>
+            Trener: @(individualTraining.CoachId == null ? "Brak trenera" : $"{individualTraining.Coach.Name} {individualTraining.Coach.LastName}")
         </p>
     }
 

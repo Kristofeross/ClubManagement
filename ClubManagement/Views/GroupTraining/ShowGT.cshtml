@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GroupTraining>
+﻿@* @model IEnumerable<GroupTraining> *@
+@model IQueryable<GroupTraining>
 
 <div>
     <form method="get" asp-action="ShowGT">
@@ -9,8 +10,6 @@
                     <option value="firstTeam" selected="@(ViewBag.FilterCategory == "firstTeam" ? true : false)">Seniorzy</option>
                     <option value="reserves" selected="@(ViewBag.FilterCategory == "reserves" ? true : false)">Rezerwy</option>
                     <option value="juniors" selected="@(ViewBag.FilterCategory == "juniors" ? true : false)">Juniorzy</option>
-                    <option value="sneakers" selected="@(ViewBag.FilterCategory == "sneakers" ? true : false)">Trampkarze</option>
-                    <option value="all" selected="@(ViewBag.FilterCategory == "all" ? true : false)">Wszystkie</option>
                 </select>
             </div>
             @* <div>
@@ -40,7 +39,7 @@
                 @obj.StartTraining.ToString("HH:mm") - @obj.EndTraining.ToString("HH:mm")
                 | @obj.Title | Szczegóły |
                 <a asp-controller="GroupTraining" asp-action="PrepareToEditGT" asp-route-id="@obj.Id" asp-route-filterCategory="@ViewBag.FilterCategory">Edytuj</a> |
-                <a asp-controller="GroupTraining" asp-action="RemoveGT" asp-route-id="@obj.Id">Usuń</a>
+                <a asp-controller="GroupTraining" asp-action="RemoveGT" asp-route-id="@obj.Id" asp-route-filterCategory="@ViewBag.FilterCategory">Usuń</a>
                 <div>
                     @{
                         TimeSpan czas = obj.TimeOfTraining;
@@ -51,6 +50,11 @@
                     <div>Przewidywany czas: @godziny godz. @minuty min.</div>
                     <div>Opis: @(obj.Description == null ? "Brak" : obj.Description)</div>
                     <div>Miejsce: @(obj.Place == null ? "Brak" : obj.Place)</div>
+                    <div>Trenerzy</div>
+                    @foreach(var coach in obj.Coaches)
+                    {
+                        <div>@coach.Name @coach.LastName - @coach.KindOfCoach</div>
+                    }
                 </div>
             </div>
         }

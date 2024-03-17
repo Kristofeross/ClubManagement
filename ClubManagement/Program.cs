@@ -59,6 +59,11 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAuthenticatedUser();
         policy.RequireRole("Admin");
     });
+    options.AddPolicy("AdminOrCoachAccess", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireRole("Admin", "Coach");
+    });
 });
 
 var app = builder.Build();

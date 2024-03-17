@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    [Migration("20240315215613_T1")]
+    [Migration("20240316171649_T1")]
     partial class T1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,7 +202,8 @@ namespace ClubManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CoachId")
+                    b.Property<int?>("CoachId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfTraining")

@@ -1,1 +1,48 @@
 ﻿@model Coach;
+
+<h2>Plan treningowy dla trenera - @User.Identity.Name</h2>
+
+@if (Model.IndividualTrainings.Any() || Model.GroupTrainings.Any())
+{
+    DateTime currentDate = DateTime.MinValue;
+
+    foreach (var individualTraining in Model.IndividualTrainings.OrderBy(t => t.DateOfTraining).ThenBy(t => t.StartTraining))
+    {
+        if (individualTraining.DateOfTraining != currentDate)
+        {
+            currentDate = individualTraining.DateOfTraining;
+            <h3>@currentDate.ToShortDateString()</h3>
+        }
+
+        <p>
+            Indywidualny trening: @individualTraining.Title<br />
+            Data: @individualTraining.DateOfTraining.ToShortDateString()<br />
+            Godzina rozpoczęcia: @individualTraining.StartTraining.ToShortTimeString()<br />
+            Godzina zakończenia: @individualTraining.EndTraining.ToShortTimeString()<br />
+            Opis: @individualTraining.Description
+        </p>
+    }
+
+    currentDate = DateTime.MinValue;
+
+    foreach (var groupTraining in Model.GroupTrainings.OrderBy(t => t.DateOfTraining).ThenBy(t => t.StartTraining))
+    {
+        if (groupTraining.DateOfTraining != currentDate)
+        {
+            currentDate = groupTraining.DateOfTraining;
+            <h3>@currentDate.ToShortDateString()</h3>
+        }
+
+        <p>
+            Trening grupowy: @groupTraining.Title<br />
+            Data: @groupTraining.DateOfTraining.ToShortDateString()<br />
+            Godzina rozpoczęcia: @groupTraining.StartTraining.ToShortTimeString()<br />
+            Godzina zakończenia: @groupTraining.EndTraining.ToShortTimeString()<br />
+            Opis: @groupTraining.Description
+        </p>
+    }
+}
+else
+{
+    <p>Brak treningów do wyświetlenia.</p>
+}

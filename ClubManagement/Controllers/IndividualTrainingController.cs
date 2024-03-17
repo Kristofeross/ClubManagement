@@ -2,6 +2,7 @@
 using ClubManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClubManagement.Controllers
 {
@@ -26,7 +27,9 @@ namespace ClubManagement.Controllers
             if(id == null || id == 0)
                 return NotFound();
 
-            var obj = _context.Footballers.Include(f => f.IndividualTrainings).FirstOrDefault(x => x.Id == id);
+            var obj = _context.Footballers.Include(f => f.IndividualTrainings)
+                .ThenInclude(it => it.Coach) // Włącz dane o trenerach
+                .FirstOrDefault(x => x.Id == id);
 
             if(obj == null)
                 return NotFound();
@@ -41,7 +44,11 @@ namespace ClubManagement.Controllers
             if(id == null || id == 0)
                 return NotFound();
 
+            IQueryable<Coach> coaches = _context.Coaches;           
+
             ViewBag.FootballerId = id;
+            ViewBag.Coaches = coaches;
+
             return View();
         }
 
@@ -86,6 +93,8 @@ namespace ClubManagement.Controllers
 
             if (obj == null) 
                 return NotFound();
+
+            ViewBag.Coaches = _context.Coaches;
 
             return View(obj);
         }

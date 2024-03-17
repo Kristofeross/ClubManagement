@@ -38,6 +38,7 @@
                 <div>Przewidywany czas: @godziny godz. @minuty min.</div>
                 <div>Opis: @(obj.Description == null ? "Brak": obj.Description)</div>
                 <div>Miejsce: @(obj.Place == null ? "Brak" : obj.Place)</div>
+                <div>Trener: @(obj.CoachId == null ? "Brak trenera" : $"{obj.Coach.Name} {obj.Coach.LastName}")</div>
             </div>
         </div>
     }

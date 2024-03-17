@@ -8,7 +8,7 @@ namespace ClubManagement.Models
         [Key]
         public int Id { get; set; }
         public int FootballerId { get; set; }
-        public int CoachId { get; set; }
+        public int? CoachId { get; set; }
         public string Type { get; set; } = "Indywidualny";
         public DateTime DateOfTraining { get; set; }
         public DateTime StartTraining { get; set; }
@@ -22,6 +22,6 @@ namespace ClubManagement.Models
         // Footballer 1-* IndividualTraining 
         public Footballer Footballer { get; set; }
         // Coach 1-* IndividualTraining 
-        public Coach Coach { get; set; }
+        public Coach? Coach { get; set; }
     }
 }

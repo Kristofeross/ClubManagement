@@ -26,8 +26,7 @@ namespace ClubManagement.Controllers
 
         // Edit Statistics
         [HttpGet]
-        [Authorize(Policy = "AdminAccess")]
-        //[Authorize(Policy = "CoachAccess")]
+        [Authorize(Policy = "AdminOrCoachAccess")]
         public IActionResult EditStatistics(int? id)
         {
             if(id == null || id == 0)
@@ -42,8 +41,7 @@ namespace ClubManagement.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AdminAccess")]
-        //[Authorize(Policy = "CoachAccess")]
+        [Authorize(Policy = "AdminOrCoachAccess")]
         public IActionResult EditStatistics([FromForm]Statistics statistics)
         {
             var editedData = _context.Statistics.FirstOrDefault(s => s.Id == statistics.Id);

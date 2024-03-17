@@ -113,9 +113,18 @@ namespace ClubManagement.Controllers
 
         [HttpGet("showAccounts")]
         [Authorize(Policy = "AdminAccess")]
-        public IActionResult ShowAccounts()
+        public IActionResult ShowAccounts(string? filterRole = "all")
         {
-            IEnumerable<Account> accounts = _context.Accounts;
+            ViewBag.FilterRole = filterRole;
+
+            IEnumerable<Account> accounts;
+
+            if (filterRole != "all")
+                accounts = _context.Accounts
+                    .Where(a => a.Role == filterRole);
+            else
+                accounts = _context.Accounts.OrderBy(a => a.Role);
+
             return View(accounts);
         }
 
@@ -199,7 +208,7 @@ namespace ClubManagement.Controllers
 
         [HttpGet("removeAccount")]
         [Authorize(Policy = "AdminAccess")]
-        public IActionResult RemoveAccount(int id)
+        public IActionResult RemoveAccount(int id, string filterRole)
         {
 
             var obj = _context.Accounts.FirstOrDefault(a => a.Id == id);
@@ -211,12 +220,12 @@ namespace ClubManagement.Controllers
                 _context.Accounts.Remove(obj);
                 _context.SaveChanges();
 
-                return RedirectToAction("showAccounts", "Account");
+                return RedirectToAction("showAccounts", "Account", new { filterRole = filterRole });
             }
             else
             {
                 TempData["Alert"] = "Nie możesz usunąć konta na, którym jesteś aktualnie zalogowany";
-                return RedirectToAction("ShowAccounts", "Account");
+                return RedirectToAction("ShowAccounts", "Account", new { filterRole = filterRole });
             }
         }
     }

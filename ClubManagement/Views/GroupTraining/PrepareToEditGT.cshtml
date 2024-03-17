@@ -15,7 +15,7 @@
 
 <div>
     <h2>Zedytuj trening grupowy</h2>
-    <p><a asp-controller="GroupTraining" asp-action="showGT">Powrót</a></p>
+    <p><a asp-controller="GroupTraining" asp-action="showGT" asp-route-filterCategory="@ViewBag.FilterCategory">Powrót</a></p>
 </div>
 
 <div>
@@ -24,6 +24,7 @@
         <button type="submit">Edytuj trening grupowy</button>
 
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" name="filterCategory" value="@ViewBag.FilterCategory" />
 
         <div class="fields">
             <label asp-for="Title">Tytuł</label>
@@ -56,15 +57,27 @@
                     ageCategoryName = "Seniorzy";
                 else if (ViewBag.FilterCategory == "reserves")
                     ageCategoryName = "Rezerwy";
-                else if (ViewBag.FilterCategory == "juniors")
-                    ageCategoryName = "Juniorzy";
                 else
-                    ageCategoryName = "Trampkarze";
+                    ageCategoryName = "Juniorzy";
             }
             <label asp-for="AgeCategory">Kategoria wiekowa:</label>
             <select asp-for="AgeCategory">
-                <option value="@ViewBag.FilterCategory" >@ageCategoryName</option>
+                <option value="@ViewBag.FilterCategory">@ageCategoryName</option>
             </select>
+        </div>
+
+        <div class="form-group">
+            <label>Trenerzy</label>
+            @foreach (var coach in ViewBag.Coaches)
+            {
+                <div>
+                    @{
+                        bool isChecked = ViewBag.SelectedCoaches.Contains(coach.Id);
+                    }
+                    <input type="checkbox" name="selectedCoaches" value="@coach.Id" checked="@isChecked" />
+                    <label>@coach.Name @coach.LastName - @coach.KindOfCoach</label>
+                </div>
+            }
         </div>
 
         <div class="form-group">

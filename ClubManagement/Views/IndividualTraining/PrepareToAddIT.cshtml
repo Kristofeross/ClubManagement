@@ -42,6 +42,20 @@
         <label asp-for="EndTraining">Godzina zakończenia</label>
         <input type="time" asp-for="EndTraining" />
     </div>
+    <div class="form-group">
+        <label>Trenerzy</label>
+        <div>
+            <input type="radio" asp-for="CoachId" value="" checked/>
+            <label asp-for="CoachId">Brak trenera</label>
+        </div>
+        @foreach (var coach in ViewBag.Coaches)
+        {
+            <div>
+                <input type="radio" asp-for="CoachId" value="@coach.Id" id="@($"{coach.Id}")" />
+                <label for="@($"{coach.Id}")">@coach.Name @coach.LastName - @coach.KindOfCoach</label>
+            </div>
+        } 
+    </div>
     <button type="submit">
         Dodaj Trening
     </button>
