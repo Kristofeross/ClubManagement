@@ -11,7 +11,7 @@
     </div>
 }
 
-<form method="get" asp-action="ShowAccounts">
+<form method="get" asp-controller="UserManagement" asp-action="ShowAccounts">
     <div>
         <div>
             <label>Po roli</label>
@@ -40,13 +40,7 @@
                 <td>@obj.AccountName</td>
                 <td>@obj.Role</td>
                 <td>
-                    <a class="nav-link text-dark" asp-controller="Account" asp-action="EditAccount" asp-route-id="@obj.Id" asp-route-type="accountName">Edytuj nazwę konta</a>
-                </td>
-                <td>
-                    <a class="nav-link text-dark" asp-controller="Account" asp-action="EditAccount" asp-route-id="@obj.Id" asp-route-type="password">Edytuj hasło</a>
-                </td>
-                <td>
-                    <a class="nav-link text-dark" asp-controller="Account" asp-action="RemoveAccount" asp-route-id="@obj.Id" asp-route-filterRole="@ViewBag.FilterRole">Usuń konto</a>
+                    <a class="nav-link text-dark" asp-controller="UserManagement" asp-action="RemoveAccount" asp-route-id="@obj.Id" asp-route-filterRole="@ViewBag.FilterRole">Usuń konto</a>
                 </td>
             </tr>
         }

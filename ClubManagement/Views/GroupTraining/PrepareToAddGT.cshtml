@@ -95,8 +95,8 @@
             @foreach (var coach in ViewBag.Coaches)
             {
                 <div>
-                    <input type="checkbox" name="selectedCoaches" value="@coach.Id" />
-                    <label>@coach.Name @coach.LastName - @coach.KindOfCoach </label>
+                    <input type="checkbox" name="selectedCoaches" value="@coach.Id" id="@coach.Id" />
+                    <label for="@coach.Id">@coach.Name @coach.LastName - @coach.KindOfCoach </label>
                 </div>
             }
         </div>
@@ -106,8 +106,8 @@
             @foreach (var footballer in ViewBag.Footballers)
             {
                 <div>
-                    <input type="checkbox" name="selectedPlayers" value="@footballer.Id" checked />
-                    <label>@footballer.Name @footballer.LastName - @footballer.AgeCategory</label>
+                    <input type="checkbox" name="selectedPlayers" value="@footballer.Id" id="@footballer.Id" checked />
+                    <label for="@footballer.Id">@footballer.Name @footballer.LastName - @footballer.AgeCategory</label>
                 </div>
             }
         </div>

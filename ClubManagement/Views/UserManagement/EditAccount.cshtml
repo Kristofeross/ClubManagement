@@ -1,0 +1,58 @@
+﻿@model Account
+<style>
+    button, .fields
+    {
+        display: block;
+    }
+</style>
+<div>
+    <h1>@ViewBag.editTitle</h1>
+    <p><a asp-controller="UserManagement" asp-action="showAccount">Powrót</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+@{
+    string actionName;
+    if (ViewBag.editAction == "accountName")
+        actionName = "EditAccountName";
+    else if (ViewBag.editAction == "email")
+        actionName = "EditAccountEmail";
+    else
+        actionName = "EditPassword";
+}
+
+<form method="post" asp-action="@actionName">
+    <input type="hidden" asp-for="Id" />
+    @if (ViewBag.editAction == "accountName")
+    {
+        <div class="fields">
+            <label asp-for="AccountName">AccountName:</label>
+            <input type="text" asp-for="AccountName" required />
+        </div>
+    }
+    else if (ViewBag.editAction == "email")
+    {
+        <div class="fields">
+            <label asp-for="Email">Email:</label>
+            <input type="email" asp-for="Email" required />
+        </div>
+    }
+    else
+    {
+        <div class="fields">
+            <label>Stare hasło:</label>
+            <input type="password" name="oldPassword" required />
+        </div>
+        <div class="fields">
+            <label asp-for="PasswordHash">Nowe hasło:</label>
+            <input type="password" asp-for="PasswordHash" required />
+        </div>
+    }
+    <div>
+        <button type="submit">Edytuj</button>
+    </div>
+</form>

@@ -42,7 +42,12 @@ namespace ClubManagement.Controllers
             
             if (_context.Accounts.Any(a => a.AccountName == model.AccountName))
             {
-                TempData["Alert"] = "Taka nazwa jest już zajęta";
+                TempData["Alert"] = "Taka nazwa użytkownika jest już zajęta";
+                return RedirectToAction("Register");
+            }
+            else if (_context.Accounts.Any(a => a.Email == model.Email))
+            {
+                TempData["Alert"] = "Ten email jest już zajęty";
                 return RedirectToAction("Register");
             }
             else
@@ -53,6 +58,7 @@ namespace ClubManagement.Controllers
                 var account = new Account
                 {
                     AccountName = model.AccountName,
+                    Email = model.Email,
                     PasswordHash = hashedPassword,
                     Salt = salt,
                     Role = model.Role
@@ -107,126 +113,6 @@ namespace ClubManagement.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
-        }
-
-        // Show, edit, delete account
-
-        [HttpGet("showAccounts")]
-        [Authorize(Policy = "AdminAccess")]
-        public IActionResult ShowAccounts(string? filterRole = "all")
-        {
-            ViewBag.FilterRole = filterRole;
-
-            IEnumerable<Account> accounts;
-
-            if (filterRole != "all")
-                accounts = _context.Accounts
-                    .Where(a => a.Role == filterRole);
-            else
-                accounts = _context.Accounts.OrderBy(a => a.Role);
-
-            return View(accounts);
-        }
-
-        [HttpGet("editAccount")]
-        [Authorize(Policy = "LoggedInAccess")]
-        public IActionResult EditAccount(int? id, string? type)
-        {
-            if (id == null || id == 0 || type == null || type == "")
-                return NotFound();
-
-            var obj = _context.Accounts.FirstOrDefault(x => x.Id == id);
-
-            if (obj == null)
-                return NotFound();
-
-            if(type == "accountName")
-            {
-                ViewBag.editAction = type;
-                ViewBag.editTitle = "Zmiana nazwy użytkownika";
-            }
-            else
-            {
-                ViewBag.editAction = type;
-                ViewBag.editTitle = "Zmiana hasła użytkownika";
-            }
-
-            return View(obj);
-        }
-
-        [HttpPost("editAccountName")]
-        [Authorize(Policy = "LoggedInAccess")]
-        public IActionResult EditAccountName([FromForm] Account model)
-        {
-            if (_context.Accounts.Any(a => a.AccountName == model.AccountName))
-            {
-                TempData["Alert"] = "Taka nazwa jest już zajęta";
-                return RedirectToAction("EditAccount", new { id = model.Id, type = "accountName" });
-            }
-            else
-            {
-                var account = _context.Accounts.FirstOrDefault(x => x.Id == model.Id);
-                if (account == null)
-                    return NotFound();
-
-                account.AccountName = model.AccountName;           
-
-                _context.Accounts.Update(account);
-                _context.SaveChanges();
-
-                return RedirectToAction("ShowAccounts");
-            }
-        }
-
-        [HttpPost("editPassword")]
-        [Authorize(Policy = "LoggedInAccess")]
-        public IActionResult EditPassword([FromForm] Account model)
-        {
-
-            var account = _context.Accounts.FirstOrDefault(x => x.Id == model.Id);
-            if (account == null)
-                return NotFound();
-
-            if (BCrypt.Net.BCrypt.Verify(model.PasswordHash, account.PasswordHash))
-            {
-                TempData["Alert"] = "Podane hasło jest takie same jak poprzdnie";
-                return RedirectToAction("EditAccount", new { id = model.Id, type = "password" });
-            }
-            else
-            {
-                string salt = BCrypt.Net.BCrypt.GenerateSalt();
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.PasswordHash, salt);
-
-                account.PasswordHash = hashedPassword;
-            }
-                
-            _context.Accounts.Update(account);
-            _context.SaveChanges();
-
-            return RedirectToAction("ShowAccounts");         
-        }
-
-        [HttpGet("removeAccount")]
-        [Authorize(Policy = "AdminAccess")]
-        public IActionResult RemoveAccount(int id, string filterRole)
-        {
-
-            var obj = _context.Accounts.FirstOrDefault(a => a.Id == id);
-            if (obj == null)
-                return NotFound();
-
-            if(obj.AccountName != HttpContext.User.Identity.Name)
-            {
-                _context.Accounts.Remove(obj);
-                _context.SaveChanges();
-
-                return RedirectToAction("showAccounts", "Account", new { filterRole = filterRole });
-            }
-            else
-            {
-                TempData["Alert"] = "Nie możesz usunąć konta na, którym jesteś aktualnie zalogowany";
-                return RedirectToAction("ShowAccounts", "Account", new { filterRole = filterRole });
-            }
         }
     }
 }

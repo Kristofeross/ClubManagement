@@ -6,7 +6,7 @@
 </style>
 <div>
     <h1>Edycja piłkarza</h1>
-    <p><a asp-controller="player" asp-action="index">Powrót</a></p>
+    <p><a asp-controller="player" asp-action="ShowPlayers">Powrót</a></p>
 </div>
 @if (TempData["Alert"] != null)
 {
@@ -25,6 +25,14 @@
     <div class="fields">
         <label asp-for="LastName">Nazwisko</label>
         <input type="text" asp-for="LastName" />
+    </div>
+    <div class="fields">
+        <label asp-for="AgeCategory">Kategoria wiekowa</label>
+        <select asp-for="AgeCategory">
+            <option value="firstTeam">Seniorzy</option>
+            <option value="reserves">Rezerwy</option>
+            <option value="juniors">Juniorzy</option>
+        </select>
     </div>
     <div class="fields">
         <label asp-for="Country">Kraj</label>

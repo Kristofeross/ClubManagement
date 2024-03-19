@@ -18,60 +18,90 @@
             <div class="container-fluid">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @* @if(User.Identity.IsAuthenticated && User.IsInRole("Admin")) *@
-                        @* @if(User.Identity.IsAuthenticated) *@                      
-                        @if (ViewContext.HttpContext.User.Identity.IsAuthenticated) @* Tej używałem *@
+                        @if (ViewContext.HttpContext.User.Identity.IsAuthenticated)
                         {
-                            <li>@userName</li>
+                            <li class="nav-item">
+                                @userName
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="LogoutAccount">Logout</a>
                             </li>
-                            @if (!User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="plan" asp-action="ShowPlan">Plan</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="ShowAccounts">Lista kont</a>
-                                </li>
-                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="UserManagement" asp-action="ShowAccount">Zarządzanie kontem</a>
+                            </li>
                         }
                         else
-                        {    
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="account" asp-action="Login">Login</a>
                             </li>
                         }
+                    </ul>
+                </div>
+            </div>
+            
+
+
+        </nav>
+
+        @* Start *@
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @* @if(User.Identity.IsAuthenticated && User.IsInRole("Admin")) *@
+                        @* @if(User.Identity.IsAuthenticated) *@
+                        @if (ViewContext.HttpContext.User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="UserManagement" asp-action="ShowAccounts">Lista kont</a>
+                                </li>
+                        }
+                        else if (ViewContext.HttpContext.User.Identity.IsAuthenticated && User.IsInRole("Coach"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="plan" asp-action="ShowPlan">Plan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="GroupTraining" asp-action="ShowGT">Treningi grupowe</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="IndividualTraining" asp-action="ShowPlayers">Treningi indywidualne</a>
+                            </li>
+                        }
+                        else if (ViewContext.HttpContext.User.Identity.IsAuthenticated && User.IsInRole("Player"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="plan" asp-action="ShowPlan">Plan</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="player" asp-action="showPlayers">Piłkarze</a>
-                       </li>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="coach" asp-action="showCoaches">Trenerzy</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Statistics" asp-action="ShowStatistics">Statystyki</a>
                         </li>
-                        @* <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                        </li> *@
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="GroupTraining" asp-action="ShowGT">Treningi grupowe</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="IndividualTraining" asp-action="ShowPlayers">Treningi indywidualne</a>
-                        </li>
-
                     </ul>
                 </div>
             </div>
+
+
+
         </nav>
+
+        @* Koniec *@
+
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">

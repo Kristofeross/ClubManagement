@@ -141,19 +141,19 @@ namespace ClubManagement.Controllers
                     if (playerAge < 18)
                     {
                         TempData["Alert"] = "Do pierwszej drużyny i rezerw zawodnik musi mieć minimum 18 lat";
-                        return RedirectToAction("AddPlayer", new { id = footballer.Id });
+                        return RedirectToAction("EditPlayer", new { id = footballer.Id });
                     }
                     break;
                 case "juniors":
                     if (playerAge < 13 || playerAge >= 18)
                     {
                         TempData["Alert"] = "Do drużyny juniorów zawodnik nie może mieć mniej 13 i więcej niż 18 lat";
-                        return RedirectToAction("AddPlayer", new { id = footballer.Id });
+                        return RedirectToAction("EditPlayer", new { id = footballer.Id });
                     }
                     break;
                 default:
                     TempData["Alert"] = "Podany wiek zawodnika nie mieści się w żadną kategorię";
-                    return RedirectToAction("AddPlayer", new { id = footballer.Id });
+                    return RedirectToAction("EditPlayer", new { id = footballer.Id });
             }
 
             var footballerToEdit = _context.Footballers.FirstOrDefault(x => x.Id == footballer.Id);

@@ -39,7 +39,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Do autoryzacji cookie
 builder.Services.AddAuthorization(options =>
 {
-    // Prawdopodobnie bêdzie skasowany LoggedInAccess
     options.AddPolicy("LoggedInAccess", policy =>
     {
         policy.RequireAuthenticatedUser();
