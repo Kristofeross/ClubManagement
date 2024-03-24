@@ -52,26 +52,19 @@ namespace ClubManagement.Controllers
         //[Authorize(Policy = "")]
         public IActionResult MatchDetails(int? id)
         {
-            if (id == null)
-                return NotFound();
+            if (id == null || id == 0)
+                return NotFound("Brak ID meczu.");
 
             var match = _context.Matches
-                .Include(m => m.MainCoach) 
-                .Include(m => m.PrimaryMatchPlayers) 
-                .Include(m => m.SubstituteMatchPlayers) 
-                .FirstOrDefault(m => m.Id == id);
+                            .Include(m => m.MainCoach)
+                            .Include(m => m.PrimaryMatchPlayers)
+                                .ThenInclude(p => p.Footballer)
+                            .Include(m => m.SubstituteMatchPlayers)
+                                .ThenInclude(s => s.Footballer)
+                            .FirstOrDefault(m => m.Id == id);
 
             if (match == null)
-                return NotFound();
-
-            // Przekazanie informacji o zawodnikach do ViewBag
-            ViewBag.PrimaryPlayers = _context.Footballers
-                .Where(p => match.PrimaryMatchPlayers.Select(pm => pm.IdForEleven).Contains(p.Id))
-                .ToList();
-            ViewBag.SubstitutePlayers = _context.Footballers
-                .Where(p => match.SubstituteMatchPlayers.Select(sm => sm.IdForSubstitute).Contains(p.Id))
-                .ToList();
-
+                return NotFound("Mecz nie istnieje.");
 
             return View(match);
         }
@@ -270,13 +263,13 @@ namespace ClubManagement.Controllers
 
             var primaryPlayers = _context.PrimaryMatchPlayers
                                 .Where(p => p.MatchId == match.Id)
-                                .Select(p => p.IdForEleven)
+                                .Select(p => p.FootballerId)
                                 .ToList();
 
             // Pobranie piłkarzy należących do rezerw
             var substitutePlayers = _context.SubstituteMatchPlayers
                                             .Where(s => s.MatchId == match.Id)
-                                            .Select(s => s.IdForSubstitute)
+                                            .Select(s => s.FootballerId)
                                             .ToList();
 
 
@@ -318,7 +311,7 @@ namespace ClubManagement.Controllers
                 if (footballer != null)
                 {
                     match.Footballers.Add(footballer);
-                    match.PrimaryMatchPlayers.Add(new PrimaryMatchPlayer { IdForEleven = playerId });
+                    match.PrimaryMatchPlayers.Add(new PrimaryMatchPlayer { FootballerId = playerId });
                 }
             }
 
@@ -329,7 +322,7 @@ namespace ClubManagement.Controllers
                 if (footballer != null)
                 {
                     match.Footballers.Add(footballer);
-                    match.SubstituteMatchPlayers.Add(new SubstituteMatchPlayer { IdForSubstitute = playerId });
+                    match.SubstituteMatchPlayers.Add(new SubstituteMatchPlayer { FootballerId = playerId });
                 }
             }
 

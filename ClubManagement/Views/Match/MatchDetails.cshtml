@@ -1,206 +1,42 @@
-﻿@* @model Match
+﻿@model Match;
 
-<h2>Szczegóły meczu</h2>
+<h1>Detale meczu</h1>
 
-<p><a asp-controller="Match" asp-action="LastMatchesWithOpponent" asp-asp-route-opponentName="@Model.Enemy">Lista ostatnich meczy z tym przeciwnikiem</a></p>
+<p><a asp-controller="Match" asp-action="LastMatchesWithOpponent" asp-route-opponentName="@Model.Enemy">Ostatnie mecze z przeciwko temu zespołowi</a></p>
 
-<div>
-    <strong>Przeciwnik:</strong> @Model.Enemy
-</div>
-<div>
-    <strong>Miejsce spotkania:</strong> @Model.Place
-</div>
-<div>
-    <strong>Data meczu:</strong> @Model.DateOfMatch.Value.ToString("dd/MM/yyyy")
-</div>
-<div>
-    <strong>Godzina rozpoczęcia:</strong> @Model.StartMatch.Value.ToString("HH:mm")
-</div>
-<div>
-    <strong>Wynik:</strong> @Model.Score
-</div>
-<div>
-    <strong>Status meczu:</strong> @Model.MatchStatus
-</div>
-<div>
-    <strong>Typ spotkania:</strong> @Model.TypeOfMatch
-</div>
+<p>ID meczu: @Model.Id</p>
+<p>Wróg: @Model.Enemy</p>
+<p>Miejsce: @Model.Place</p>
+<p>Kategoria wiekowa: @Model.AgeCategory</p>
+<p>Data meczu: @Model.DateOfMatch</p>
+<p>Godzina rozpoczęcia: @Model.StartMatch</p>
+<p>Wynik: @Model.Score</p>
+<p>Status meczu: @Model.MatchStatus</p>
+<p>Gospodarz meczu: @Model.MatchHost</p>
+<p>Rodzaj meczu: @Model.TypeOfMatch</p>
 
-<h3>Informacje o trenerach:</h3>
-@if (Model.MainCoach != null)
+@if(@Model.MainCoach != null)
 {
-    <div>
-        <strong>Imię i nazwisko głównego trenera:</strong> @Model.MainCoach.Name @Model.MainCoach.LastName
-    </div>
-    <div>
-        <strong>Rola:</strong> @Model.MainCoach.KindOfCoach
-    </div>
+    <h2>Trener</h2>
+    <p>@Model.MainCoach.Name</p>
 }
 else
 {
-    <p>Brak danych o głównym trenerze.</p>
+    <p>Brak wpisanego trenera</p>
 }
 
-<h3>Podstawowy skład:</h3>
-@if (Model.PrimaryMatchPlayers != null && Model.PrimaryMatchPlayers.Any())
+<h2>Podstawowa jedenastka</h2>
+<ul>
+@foreach (var player in Model.PrimaryMatchPlayers)
 {
-    <table>
-        <thead>
-            <tr>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Pozycja</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var primaryPlayerId in Model.PrimaryMatchPlayers)
-            {
-                var player = _context.Footballers.FirstOrDefault(p => p.Id == primaryPlayerId);
-                if (player != null)
-                {
-                    <tr>
-                        <td>@player.FirstName</td>
-                        <td>@player.LastName</td>
-                        <td>@player.Position</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    <li>@player.Footballer.Name @player.Footballer.LastName</li>
 }
-else
-{
-    <p>Brak danych o podstawowym składzie.</p>
-}
+</ul>
 
-<h3>Rezerwowi:</h3>
-@if (Model.SubstituteMatchPlayers != null && Model.SubstituteMatchPlayers.Any())
+<h2>Rezerwa</h2>
+<ul>
+@foreach (var player in Model.SubstituteMatchPlayers)
 {
-    <table>
-        <thead>
-            <tr>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Pozycja</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var substitutePlayerId in Model.SubstituteMatchPlayers)
-            {
-                var player = _context.Footballers.FirstOrDefault(p => p.Id == substitutePlayerId);
-                if (player != null)
-                {
-                    <tr>
-                        <td>@player.FirstName</td>
-                        <td>@player.LastName</td>
-                        <td>@player.Position</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    <li>@player.Footballer.Name @player.Footballer.LastName</li>
 }
-else
-{
-    <p>Brak danych o rezerwowych.</p>
-}
- *@
-
-@model Match
-
-<h2>Szczegóły meczu</h2>
-
-<p><a asp-controller="Match" asp-action="LastMatchesWithOpponent" asp-asp-route-opponentName="@Model.Enemy">Lista ostatnich meczy z tym przeciwnikiem</a></p>
-
-<div>
-    <strong>Przeciwnik:</strong> @Model.Enemy
-</div>
-<div>
-    <strong>Miejsce spotkania:</strong> @Model.Place
-</div>
-<div>
-    <strong>Data meczu:</strong> @Model.DateOfMatch.Value.ToString("dd/MM/yyyy")
-</div>
-<div>
-    <strong>Godzina rozpoczęcia:</strong> @Model.StartMatch.Value.ToString("HH:mm")
-</div>
-<div>
-    <strong>Wynik:</strong> @Model.Score
-</div>
-<div>
-    <strong>Status meczu:</strong> @Model.MatchStatus
-</div>
-<div>
-    <strong>Typ spotkania:</strong> @Model.TypeOfMatch
-</div>
-
-<h3>Informacje o trenerach:</h3>
-@if (Model.MainCoach != null)
-{
-    <div>
-        <strong>Imię i nazwisko głównego trenera:</strong> @Model.MainCoach.Name @Model.MainCoach.LastName
-    </div>
-    <div>
-        <strong>Rola:</strong> @Model.MainCoach.KindOfCoach
-    </div>
-}
-else
-{
-    <p>Brak danych o głównym trenerze.</p>
-}
-
-<h3>Podstawowy skład:</h3>
-@if (ViewBag.PrimaryPlayers != null && ViewBag.PrimaryPlayers.Any())
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Pozycja</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var player in ViewBag.PrimaryPlayers)
-            {
-                <tr>
-                    <td>@player.FirstName</td>
-                    <td>@player.LastName</td>
-                    <td>@player.Position</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Brak danych o podstawowym składzie.</p>
-}
-
-<h3>Rezerwowi:</h3>
-@if (ViewBag.SubstitutePlayers != null && ViewBag.SubstitutePlayers.Any())
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Pozycja</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var player in ViewBag.SubstitutePlayers)
-            {
-                <tr>
-                    <td>@player.FirstName</td>
-                    <td>@player.LastName</td>
-                    <td>@player.Position</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Brak danych o rezerwowych.</p>
-}
+</ul>
