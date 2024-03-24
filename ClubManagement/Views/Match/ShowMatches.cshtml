@@ -1,0 +1,68 @@
+﻿@model IQueryable<Match>;
+
+<div>
+    <h1>Mecze </h1>
+    <p><a asp-controller="home" asp-action="index">Powrót</a></p>
+    <p>
+        <a asp-controller="Match" asp-action="PrepareToAddMatch" asp-route-filterCategory="@ViewBag.FilterCategory">
+            Dodaj mecz
+        </a>
+    </p>
+    <p><a asp-controller="Match" asp-action="MatchResults">Pokaż poprzednie mecze</a></p>
+    <p><a asp-controller="Match" asp-action="MatchSchedule">Pokaż harmonogram meczy</a></p>
+    
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Alert"] != null)
+    {
+        <div class="alert alert-danger ">
+            @TempData["Alert"]
+        </div>
+    }
+    <div>
+        <form method="get" asp-action="ShowMatches">
+            <div>
+                <div>
+                    <label>Kategoria wiekowa</label>
+                    <select name="filterCategory">
+                        <option value="firstTeam" selected="@(ViewBag.FilterCategory == "firstTeam" ? true : false)">Seniorzy</option>
+                        <option value="reserves" selected="@(ViewBag.FilterCategory == "reserves" ? true : false)">Rezerwy</option>
+                        <option value="juniors" selected="@(ViewBag.FilterCategory == "juniors" ? true : false)">Juniorzy</option>
+                        @* <option value="all" selected="@(ViewBag.FilterCategory == "all" ? true : false)">Treningi dla wszystkich</option> *@
+                    </select>
+                </div>
+
+                <button type="submit">Filtruj</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        @foreach (var obj in Model)
+        {
+            <div>@obj.TypeOfMatch</div>
+            <div>
+                @obj.Enemy - 
+                @((obj.DateOfMatch != null) ? obj.DateOfMatch.Value.ToString("dd-MM-yyyy") : "Brak okreslonego dnia") |
+                @if (obj.MatchStatus == "canceled" || obj.MatchStatus == "delayed")
+                {
+                    @obj.MatchStatus
+                }
+                else
+                {
+                    @((obj.StartMatch != null) ? obj.StartMatch.Value.ToString("HH:mm") : "Brak okreslonej godziny")
+                }
+                <a asp-controller="Match" asp-action="MatchDetails" asp-route-id="@obj.Id">Szczegóły</a> |
+                <a asp-controller="Match" asp-action="PrepareToEditMatch" asp-route-id="@obj.Id" asp-route-filterCategory="@ViewBag.FilterCategory">Edytuj</a> |
+                <a asp-controller="Match" asp-action="PrepareToAddTrainer" asp-route-id="@obj.Id">Trener</a> |
+                <a asp-controller="Match" asp-action="PrepareToAddStaff" asp-route-id="@obj.Id">Ustal skład</a> |
+                <a asp-controller="Match" asp-action="RemoveMatch" asp-route-id="@obj.Id" asp-route-filterCategory="@ViewBag.FilterCategory">Usuń</a>
+            </div>
+        }
+    </div>
+
+</div>

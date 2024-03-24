@@ -7,15 +7,26 @@ namespace ClubManagement.Models
     {
         [Key]
         public int Id { get; set; }
-        public DateTime Date {  get; set; }
-        public DateTime Time { get; set; }
-        public string Place { get; set; } = string.Empty;
+        public int? MainCoachId { get; set; }
         public string Enemy { get; set; } = string.Empty;
-        public string Score { get; set; } = string.Empty;
-        public bool IsCancelledOrPostponed { get; set; }
+        public string? Place { get; set; }
+        public string AgeCategory { get; set; } = string.Empty;
+        public DateTime? DateOfMatch {  get; set; }
+        public DateTime? StartMatch { get; set; }
+        public string? Score { get; set; }
+        public string? ScoreStatus { get; set; }
+        public string MatchHost { get; set; } = string.Empty;
+        public string MatchStatus {  get; set; } = string.Empty;
+        public string TypeOfMatch {  get; set; } = string.Empty;
+
         // Footballer *-* Match
         public ICollection<Footballer> Footballers { get; set; } = new List<Footballer>();
-        // Coach *-* Match
-        public ICollection<Coach> Coaches { get; set; } = new List<Coach>();
+
+        // Relacja jeden do jeden z StartingEleven
+        public ICollection<PrimaryMatchPlayer> PrimaryMatchPlayers { get; set; } = new List<PrimaryMatchPlayer>();
+        public ICollection<SubstituteMatchPlayer> SubstituteMatchPlayers { get; set; } = new List<SubstituteMatchPlayer>();
+
+        // Coach 1-* Match
+        public Coach? MainCoach { get; set; }
     }
 }

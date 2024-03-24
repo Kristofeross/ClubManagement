@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Match>
+
+<h2>Zakończone mecze</h2>
+
+@if (Model.Any())
+{
+    <ul>
+        @foreach (var match in Model)
+        {
+            <li>
+                @match.Enemy - @(string.IsNullOrEmpty(match.Score) ? "Brak wyniku" : match.Score)
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Brak wyników meczów.</p>
+}

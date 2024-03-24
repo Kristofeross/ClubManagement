@@ -4,6 +4,7 @@ using ClubManagement.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    partial class ClubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240321113234_T6")]
+    partial class T6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -267,10 +269,6 @@ namespace ClubManagement.Migrations
                     b.Property<int?>("MainCoachId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MatchHost")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MatchStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -279,9 +277,6 @@ namespace ClubManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Score")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ScoreStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartMatch")
@@ -296,27 +291,6 @@ namespace ClubManagement.Migrations
                     b.HasIndex("MainCoachId");
 
                     b.ToTable("Matches");
-                });
-
-            modelBuilder.Entity("ClubManagement.Models.PrimaryMatchPlayer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdForEleven")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MatchId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MatchId");
-
-                    b.ToTable("PrimaryMatchPlayers");
                 });
 
             modelBuilder.Entity("ClubManagement.Models.Statistics", b =>
@@ -355,27 +329,6 @@ namespace ClubManagement.Migrations
                         .IsUnique();
 
                     b.ToTable("Statistics");
-                });
-
-            modelBuilder.Entity("ClubManagement.Models.SubstituteMatchPlayer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdForSubstitute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MatchId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MatchId");
-
-                    b.ToTable("SubstituteMatchPlayers");
                 });
 
             modelBuilder.Entity("ClubManagement.Models.Transfer", b =>
@@ -482,17 +435,6 @@ namespace ClubManagement.Migrations
                     b.Navigation("MainCoach");
                 });
 
-            modelBuilder.Entity("ClubManagement.Models.PrimaryMatchPlayer", b =>
-                {
-                    b.HasOne("ClubManagement.Models.Match", "Match")
-                        .WithMany("PrimaryMatchPlayers")
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Match");
-                });
-
             modelBuilder.Entity("ClubManagement.Models.Statistics", b =>
                 {
                     b.HasOne("ClubManagement.Models.Footballer", "Footballer")
@@ -502,17 +444,6 @@ namespace ClubManagement.Migrations
                         .IsRequired();
 
                     b.Navigation("Footballer");
-                });
-
-            modelBuilder.Entity("ClubManagement.Models.SubstituteMatchPlayer", b =>
-                {
-                    b.HasOne("ClubManagement.Models.Match", "Match")
-                        .WithMany("SubstituteMatchPlayers")
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Match");
                 });
 
             modelBuilder.Entity("CoachGroupTraining", b =>
@@ -580,13 +511,6 @@ namespace ClubManagement.Migrations
 
                     b.Navigation("Statistics")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ClubManagement.Models.Match", b =>
-                {
-                    b.Navigation("PrimaryMatchPlayers");
-
-                    b.Navigation("SubstituteMatchPlayers");
                 });
 #pragma warning restore 612, 618
         }

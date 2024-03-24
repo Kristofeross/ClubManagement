@@ -1,0 +1,104 @@
+﻿@model Match;
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+
+@if(TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+
+<div>
+    <h2>Dodawanie nowego meczu</h2>
+    <p>
+        <a asp-controller="Match" asp-action="showMatches" asp-route-filterCategory="@ViewBag.FilterCategory">
+            Powrót
+        </a>
+    </p>
+</div>
+
+@* <div>
+    <form method="get" asp-action="PrepareToAddMatch">
+        <label>Wybierz pozycje zawodników do dodania</label>
+        <select name="filterPosition">
+            <option value="all" selected="@(ViewBag.FilterPosition == "all" ? true : false)">Wszyscy</option>
+            <option value="goalkeeper" selected="@(ViewBag.FilterPosition == "goalkeeper" ? true : false)">Bramkarze</option>
+            <option value="defender" selected="@(ViewBag.FilterPosition == "defender" ? true : false)">Obrońcy</option>
+            <option value="helper" selected="@(ViewBag.FilterPosition == "helper" ? true : false)">Pomocnicy</option>
+            <option value="attacker" selected="@(ViewBag.FilterPosition == "attacker" ? true : false)">Napastnicy</option>
+        </select>
+
+        <input type="hidden" name="filterCategory" value="@ViewBag.FilterCategory" />
+
+        <button type="submit">Filtruj zawodników</button>
+    </form>
+</div>
+ *@
+<div>
+    <form method="post" asp-action="AddMatch">
+
+        <button type="submit">Dodaj mecz</button>
+
+        <div class="fields">
+            <label asp-for="Enemy">Pzeciwnik</label>
+            <input type="text" asp-for="Enemy" />
+        </div>
+        <div class="fields">
+            <label asp-for="Place">Miejsce spotkania</label>
+            <input type="text" asp-for="Place" />
+        </div>
+        <div class="fields">
+            <label asp-for="DateOfMatch">Data meczu</label>
+            <input type="date" asp-for="DateOfMatch" />
+        </div>
+        <div class="fields">
+            <label asp-for="StartMatch">Godzina rozpoczęcia</label>
+            <input type="time" asp-for="StartMatch" />
+        </div>
+
+        <div>
+            <label asp-for="AgeCategory">Kategoria wiekowa:</label>
+            <select asp-for="AgeCategory">
+                <option value="firstTeam">Seniorzy</option>
+                <option value="reserves">Rezerwa</option>
+                <option value="juniors">Juniorzy</option>
+            </select>
+        </div>
+        
+        <div>
+            <label>Status meczu</label>
+            <select asp-for="MatchStatus">
+                <option value="coming">Nadchodzący</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Typ spotkania</label>
+            <select asp-for="TypeOfMatch">
+                <option value="league">Ligowy</option>
+                <option value="cup">Pucharowy</option>
+                <option value="friendly">Towarzyski</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Gospodarz meczu:</label>
+            <select asp-for="MatchHost">
+                <option value="home">Domowy</option>
+                <option value="away">Wyjazdowy</option>
+            </select>
+        </div>
+
+    </form>
+</div>

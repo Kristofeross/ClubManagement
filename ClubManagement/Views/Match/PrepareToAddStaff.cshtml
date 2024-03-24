@@ -1,0 +1,59 @@
+﻿@model Match;
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+
+<div>
+    <p>Dodaj podstawową 11 do meczu</p>
+    <p><a asp-controller="Match" asp-action="ShowMatches" asp-route-filterCategory="@Model.AgeCategory">Powrót</a></p>
+    <p><a asp-controller="Match" asp-action="ClearMatchPlayers" asp-route-id="@Model.Id">Usuń skłąd do meczu</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<form method="post" asp-action="AddStaff">
+    <button type="submit">Dodaj</button>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label>Piłkarze</label>
+        @foreach (var footballer in ViewBag.Players)
+        {
+            bool isPrimaryPlayer = ViewBag.PrimaryPlayers.Contains(footballer.Id);
+            bool isSubstitutePlayer = ViewBag.SubstitutePlayers.Contains(footballer.Id);
+
+            <div>
+
+                <label >@footballer.Name @footballer.LastName - @footballer.Position (@footballer.AgeCategory)</label>:
+                <input type="checkbox" name="selectedElevenPlayers" value="@footballer.Id" id="eleven_@footballer.Id" checked="@isPrimaryPlayer" /> - <label for="eleven_@footballer.Id">Podstawowa 11</label> |
+                <input type="checkbox" name="selectedSubstitutePlayers" value="@footballer.Id" id="substitute_@footballer.Id" checked="@isSubstitutePlayer" /> - <label for="substitute_@footballer.Id">Rezerwa</label>
+            </div>
+        }
+    </div>
+
+</form>
+<script>
+    // Funkcja, która odznaczy checkbox przy podstawowej jedenastce, gdy zostanie zaznaczony checkbox przy rezerwie i vice versa
+    document.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (this.name === 'selectedElevenPlayers') {
+                var substituteCheckbox = document.getElementById('substitute_' + this.value);
+                if (substituteCheckbox.checked) {
+                    substituteCheckbox.checked = false;
+                }
+            } else if (this.name === 'selectedSubstitutePlayers') {
+                var elevenCheckbox = document.getElementById('eleven_' + this.value);
+                if (elevenCheckbox.checked) {
+                    elevenCheckbox.checked = false;
+                }
+            }
+        });
+    });
+</script>

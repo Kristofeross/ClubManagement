@@ -1,5 +1,6 @@
 ﻿using ClubManagement.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks.Dataflow;
 
 namespace ClubManagement.ApplicationDbContext
 {
@@ -16,6 +17,10 @@ namespace ClubManagement.ApplicationDbContext
         public DbSet<Transfer> Transfers { get; set; }
         public DbSet<Statistics> Statistics { get; set; }
         public DbSet<Match> Matches { get; set; }
+
+        // Zobaczy się 
+        public DbSet<PrimaryMatchPlayer> PrimaryMatchPlayers { get; set; }
+        public DbSet<SubstituteMatchPlayer> SubstituteMatchPlayers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,9 +87,23 @@ namespace ClubManagement.ApplicationDbContext
 
             // Footballer *-* Match
             modelBuilder.Entity<Match>()
-                .HasMany(m => m.Coaches)
+                .HasOne(m => m.MainCoach)
                 .WithMany(c => c.Matches)
-                .UsingEntity(m => m.ToTable("CoachMatch"));
+                .HasForeignKey(m => m.MainCoachId);
+
+
+
+            // Match 1-* PrimaryMatchPlayer
+            modelBuilder.Entity<PrimaryMatchPlayer>()
+                .HasOne(s => s.Match)
+                .WithMany(m => m.PrimaryMatchPlayers)
+                .HasForeignKey(s => s.MatchId);
+
+            // Match 1-* SubstituteMatchPlayer
+            modelBuilder.Entity<SubstituteMatchPlayer>()
+                .HasOne(s => s.Match)
+                .WithMany(m => m.SubstituteMatchPlayers)
+                .HasForeignKey(s => s.MatchId);
         }
     }
 }

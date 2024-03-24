@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 /* Add services to the container.*/
 
 builder.Services.AddControllersWithViews(); 
-//builder.Services.AddControllersWithViews().AddFluentValidation(); // Ten jest z wykorzystaniem Fluent Validation
 // Do Swaggera
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

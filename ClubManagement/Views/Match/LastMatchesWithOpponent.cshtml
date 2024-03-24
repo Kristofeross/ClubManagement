@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Match>
+
+<h2>Ostatnie mecze z @ViewBag.OpponentName</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Numer</th>
+                <th>Przeciwnik</th>
+                <th>Miejsce</th>
+                <th>Data meczu</th>
+                <th>Godzina rozpoczęcia</th>
+                <th>Wynik</th>
+                <th>Status</th>
+                <th>Typ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var match in Model)
+            {
+                <tr>
+                    <td>@match.Id</td>
+                    <td>@match.Enemy</td>
+                    <td>@match.Place</td>
+                    <td>@match.DateOfMatch.Value.ToString("dd/MM/yyyy")</td>
+                    <td>@match.StartMatch.Value.ToString("HH:mm")</td>
+                    <td>@match.Score</td>
+                    <td>@match.MatchStatus</td>
+                    <td>@match.TypeOfMatch</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Brak danych o meczach z @ViewBag.OpponentName.</p>
+}

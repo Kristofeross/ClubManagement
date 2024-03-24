@@ -4,6 +4,7 @@ using ClubManagement.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClubManagement.Migrations
 {
     [DbContext(typeof(ClubDbContext))]
-    partial class ClubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240323152719_T8")]
+    partial class T8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,9 +281,6 @@ namespace ClubManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Score")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ScoreStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartMatch")

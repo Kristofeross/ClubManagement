@@ -1,0 +1,136 @@
+﻿@model Match;
+
+@{
+    string teamScore = "";
+    string opponentScore = "";
+    if(Model.Score != null)
+    {
+        if(Model.MatchHost == "home")
+        {
+            teamScore = Model.Score.Split("-")[0].Trim();
+            opponentScore = Model.Score.Split("-")[1].Trim();
+        }
+        else
+        {
+            teamScore = Model.Score.Split("-")[1].Trim();
+            opponentScore = Model.Score.Split("-")[0].Trim();
+
+        }
+    }
+}
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+
+<div>
+    <h2>Edytowanie meczu</h2>
+    <p>
+        <a asp-controller="Match" asp-action="showMatches" asp-route-filterCategory="@Model.AgeCategory">
+            Powrót
+        </a>
+    </p>
+</div>
+
+ 
+<div>
+    <form method="post" asp-action="EditMatch">
+
+        <button type="submit">Edytuj mecz</button>
+
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="MainCoachId" />
+
+        <div class="fields">
+            <label asp-for="Enemy">Pzeciwnik</label>
+            <input type="text" asp-for="Enemy" />
+        </div>
+        <div class="fields">
+            <label asp-for="Place">Miejsce spotkania</label>
+            <input type="text" asp-for="Place" />
+        </div>
+        <div class="fields">
+            <label asp-for="DateOfMatch">Data meczu</label>
+            <input type="date" asp-for="DateOfMatch" />
+        </div>
+        <div class="fields">
+            <label asp-for="StartMatch">Godzina rozpoczęcia</label>
+            <input type="time" asp-for="StartMatch" />
+        </div>
+
+        <div class="fields">
+            <label name="TeamGoals">Gole drużyny</label>
+            <input type="number" name="TeamGoals" value="@teamScore" />
+        </div>
+        <div class="fields">
+            <label name="OpponentGoals">Gole przeciwnika</label>
+            <input type="number" name="OpponentGoals" value="@opponentScore" />
+        </div>
+
+        <div>
+            @{
+                string chosenCategory;
+                if (Model.AgeCategory == "firstTeam")
+                    chosenCategory = "Seniorz";
+                else if (Model.AgeCategory == "firstTeam")
+                    chosenCategory = "Rezerwa";
+                else
+                    chosenCategory = "Juniorzy";
+            }
+            <label asp-for="AgeCategory">Kategoria wiekowa:</label>
+            <select asp-for="AgeCategory">
+                <option value="@Model.AgeCategory">@chosenCategory</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Status meczu</label>
+            <select asp-for="MatchStatus">
+                <option value="coming">Nadchodzący</option>
+                <option value="finished">Zakończony</option>
+                <option value="canceled">Odwołany</option>
+                <option value="delayed">Przełożony</option>
+            </select>
+        </div>
+
+        <div>
+            @{
+                string chosenType;
+                if (Model.TypeOfMatch == "league")
+                    chosenType = "Ligowy";
+                else if (Model.TypeOfMatch == "cup")
+                    chosenType = "Pucharowy";
+                else
+                    chosenType = "Towarzyski";
+            }
+            <label>Typ spotkania</label>
+            <select asp-for="TypeOfMatch">
+                <option value="@Model.TypeOfMatch">@chosenType</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Gospodarz meczu:</label>
+            <select asp-for="MatchHost">
+                <option value="home">Domowy</option>
+                <option value="away">Wyjazdowy</option>
+            </select>
+        </div>
+
+    </form>
+</div>

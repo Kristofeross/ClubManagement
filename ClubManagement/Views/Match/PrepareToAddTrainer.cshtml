@@ -1,0 +1,38 @@
+﻿@model Match;
+
+<style>
+    button, .fields {
+        display: block;
+    }
+</style>
+
+<div>
+    <p>Dodaj zawodników do meczu</p>
+    <p><a asp-controller="Match" asp-action="ShowMatches" asp-route-filterCategory="@Model.AgeCategory">Powrót</a></p>
+</div>
+@if (TempData["Alert"] != null)
+{
+    <div class="alert alert-danger ">
+        @TempData["Alert"]
+    </div>
+}
+<form method="post" asp-action="AddTrainer">
+    <button type="submit">Dodaj trenera do meczu</button>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label>Trenerzy</label>
+        <div>
+            <input type="radio" asp-for="MainCoachId" value="" checked="@(Model.MainCoachId == null ? true : false)" />
+            <label asp-for="MainCoachId">Brak trenera</label>
+        </div>
+        @foreach (var coach in ViewBag.Coaches)
+        {
+            <div>
+                <input type="radio" asp-for="MainCoachId" value="@coach.Id" id="@($"{coach.Id}")" checked="@(Model.MainCoachId == coach.Id ? true : false)" />
+                <label for="@($"{coach.Id}")">@coach.Name @coach.LastName - @coach.KindOfCoach</label>
+            </div>
+        }
+    </div>
+</form>
